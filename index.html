@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cupones</title>
+<meta name="theme-color" content="#0F1218">
+<style>
+:root{
+  --fondo:#F4F5F8; --tarjeta:#FFFFFF; --texto:#14171F; --suave:#5F6675; --borde:#E2E5EC;
+  --acento:#7C3AED; --acento2:#EDE7FD; --ok:#0F8A4A; --aviso:#B45309; --chip:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --fondo:#0F1218; --tarjeta:#191E27; --texto:#ECEEF3; --suave:#9AA2B1; --borde:#2A303C;
+         --acento:#A78BFA; --acento2:#2A2340; --ok:#4ADE80; --aviso:#FBBF24; --chip:#191E27; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fondo);color:var(--texto);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+header{position:sticky;top:0;z-index:5;background:var(--tarjeta);border-bottom:1px solid var(--borde);padding:12px 16px 10px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px}
+.logo i{font-style:normal;display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#A78BFA,#7C3AED);color:#fff;font-size:17px}
+.btn{border:1px solid var(--borde);background:var(--chip);color:var(--texto);border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;cursor:pointer}
+.etq{font-size:12px;color:var(--suave);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+.chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:0 0 auto;border:1px solid var(--borde);background:var(--chip);color:var(--texto);border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
+.chips button.on{background:#7C3AED;border-color:#7C3AED;color:#fff;font-weight:700}
+main{padding:12px 16px 40px;max-width:760px;margin:0 auto}
+.estado{color:var(--suave);font-size:13px;margin:2px 0 10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.lista{display:grid;gap:10px}
+.cup{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:13px 14px}
+.cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tienda{font-weight:700;font-size:15px}
+.vence{font-size:12px;color:var(--suave);white-space:nowrap}
+.vence.pronto{color:var(--aviso);font-weight:700}
+.benef{font-size:22px;font-weight:800;margin:4px 0 2px;color:var(--acento)}
+.minimo{font-size:14px;color:var(--suave)}
+.minimo b{color:var(--texto)}
+.desc{font-size:13px;color:var(--suave);margin:6px 0 0}
+.tag{display:inline-block;font-size:11px;font-weight:700;background:var(--acento2);color:var(--acento);border-radius:6px;padding:2px 7px;margin-top:6px}
+.acc{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.cod{flex:1 1 150px;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1.5px dashed var(--acento);border-radius:10px;padding:8px 10px;background:var(--acento2);cursor:pointer;min-width:0}
+.cod span{font:700 15px ui-monospace,Consolas,monospace;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cod em{font-style:normal;font-size:12px;font-weight:700;color:var(--acento);white-space:nowrap}
+.cod.copiado em{color:var(--ok)}
+.abrir{flex:0 0 auto;display:grid;place-items:center;border-radius:10px;padding:8px 14px;background:#7C3AED;color:#fff;font-weight:700;text-decoration:none;font-size:14px}
+.sinCod{flex:1 1 150px;font-size:13px;color:var(--suave);align-self:center}
+.vacio{text-align:center;color:var(--suave);padding:40px 10px}
+.pie{color:var(--suave);font-size:12px;text-align:center;margin-top:22px}
+.pie a{color:var(--suave)}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="logo"><i>%</i>Cupones</div>
+    <button class="btn" id="btnAct">↻ Actualizar</button>
+  </div>
+  <div class="etq">¿Cuánto vas a gastar?</div>
+  <div class="chips" id="chips"></div>
+</header>
+<main>
+  <div class="estado"><span id="cuenta"></span><span id="hora"></span></div>
+  <div class="lista" id="lista"><div class="vacio">Cargando cupones…</div></div>
+  <div class="pie">Cupones de <a href="https://soloprecio.com.ar/cupones" target="_blank" rel="noopener">soloprecio.com.ar</a>. Pueden agotarse o cambiar sin aviso.</div>
+</main>
+<script src="lector.js"></script>
+<script>
+const FUENTE = 'https://soloprecio.com.ar/cupones';
+// Hasta cuánto se va a gastar: se muestran los cupones cuya compra mínima entra en ese monto
+const TOPES = [
+  { t: 'Todos', v: Infinity },
+  { t: 'Sin mínimo', v: 0 },
+  { t: 'Hasta $50.000', v: 50000 },
+  { t: 'Hasta $100.000', v: 100000 },
+  { t: 'Hasta $300.000', v: 300000 },
+  { t: 'Hasta $500.000', v: 500000 },
+  { t: 'Hasta $1.000.000', v: 1000000 },
+];
+let tope = Infinity;
+try { const g = localStorage.getItem('cup:tope'); if (g !== null) tope = g === 'inf' ? Infinity : Number(g); } catch (e) {}
+let cupones = [], cuando = null;
+
+const pesos = (n) => '$' + Math.round(n).toLocaleString('es-AR');
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// Compra mínima en pesos (0 = sin mínimo; null = no se sabe)
+function minimoDe(c) {
+  if (typeof c.compra_minima === 'number') return c.compra_minima;
+  const m = /m[ií]nima\s*\$\s*([\d.]+)/i.exec((c.condicion_principal || '') + ' ' + (c.descripcion || ''));
+  return m ? Number(m[1].replace(/\./g, '')) : null;
+}
+// Es un cupón de verdad (no un "Ver ofertas" genérico)
+const esCupon = (c) => !!c.codigo || /off|%|usd|\$/i.test(c.beneficio_principal || '');
+
+function venceTexto(c) {
+  if (!c.vence_en) return { t: '', pronto: false };
+  const d = new Date(c.vence_en), h = (d - Date.now()) / 36e5;
+  if (h < 0) return { t: 'vencido', pronto: true };
+  if (h < 24) return { t: 'vence hoy', pronto: true };
+  if (h < 48) return { t: 'vence mañana', pronto: true };
+  return { t: 'hasta el ' + d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' }), pronto: false };
+}
+
+function pintarChips() {
+  document.getElementById('chips').innerHTML = TOPES.map((x, i) =>
+    `<button data-i="${i}" class="${x.v === tope ? 'on' : ''}">${x.t}</button>`).join('');
+}
+document.getElementById('chips').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  tope = TOPES[b.dataset.i].v;
+  try { localStorage.setItem('cup:tope', tope === Infinity ? 'inf' : String(tope)); } catch (e2) {}
+  pintarChips(); pintar();
+});
+
+// Primero los que tienen mínimo conocido (de menor a mayor); los que dicen "Ver condiciones", al final
+const ord = (c) => { const m = minimoDe(c); return m == null ? 1e15 : m; };
+
+function pintar() {
+  const validos = cupones.filter((c) => esCupon(c) && venceTexto(c).t !== 'vencido');
+  const vis = validos.filter((c) => {
+    if (tope === Infinity) return true;
+    const m = minimoDe(c);
+    return m == null ? tope > 0 : m <= tope;   // sin mínimo informado: entra salvo en "Sin mínimo"
+  }).sort((a, b) => ord(a) - ord(b) || (b.descuento_monto || 0) - (a.descuento_monto || 0));
+  const lista = document.getElementById('lista');
+  document.getElementById('cuenta').textContent = cupones.length ? `${vis.length} ${vis.length === 1 ? 'cupón' : 'cupones'}` : '';
+  if (!cupones.length) return;
+  if (!vis.length) { lista.innerHTML = '<div class="vacio">No hay cupones para ese monto.</div>'; return; }
+  lista.innerHTML = vis.map((c) => {
+    const m = minimoDe(c), v = venceTexto(c);
+    const minTxt = m == null ? 'Ver condiciones' : m === 0 ? '<b>Sin compra mínima</b>' : `Compra mínima <b>${pesos(m)}</b>`;
+    const cod = c.codigo
+      ? `<div class="cod" data-cod="${esc(c.codigo)}"><span>${esc(c.codigo)}</span><em>Copiar</em></div>`
+      : `<div class="sinCod">${/enlace|link/i.test(c.descripcion || '') ? 'Se activa desde el enlace' : 'Sin código'}</div>`;
+    return `<div class="cup">
+      <div class="cab"><span class="tienda">${esc(c.tienda)}</span><span class="vence ${v.pronto ? 'pronto' : ''}">${v.t}</span></div>
+      <div class="benef">${esc(c.beneficio_principal)}</div>
+      <div class="minimo">${minTxt}</div>
+      ${c.etiqueta ? `<span class="tag">${esc(c.etiqueta)}</span>` : ''}
+      ${c.descripcion ? `<p class="desc">${esc(c.descripcion)}</p>` : ''}
+      <div class="acc">${cod}${c.link ? `<a class="abrir" href="${esc(c.link)}" target="_blank" rel="noopener">Abrir ↗</a>` : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('lista').addEventListener('click', async (e) => {
+  const b = e.target.closest('.cod'); if (!b) return;
+  const t = b.dataset.cod;
+  try { if (window.AppCup) AppCup.copiar(t); else await navigator.clipboard.writeText(t); }
+  catch (er) { const x = document.createElement('textarea'); x.value = t; document.body.appendChild(x); x.select(); document.execCommand('copy'); x.remove(); }
+  b.classList.add('copiado'); b.querySelector('em').textContent = '✓ Copiado';
+  setTimeout(() => { b.classList.remove('copiado'); b.querySelector('em').textContent = 'Copiar'; }, 2000);
+});
+
+function pintarHora() {
+  document.getElementById('hora').textContent = cuando ? 'Actualizado ' + new Date(cuando).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+}
+
+async function traer() {
+  const btn = document.getElementById('btnAct');
+  btn.disabled = true; btn.textContent = '↻ Buscando…';
+  try {
+    const r = await fetch(FUENTE + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('la página contestó ' + r.status);
+    cupones = leerCupones(await r.text());
+    cuando = Date.now();
+    try { localStorage.setItem('cup:datos', JSON.stringify({ cupones, cuando })); } catch (e) {}
+  } catch (e) {
+    if (!cupones.length) document.getElementById('lista').innerHTML =
+      `<div class="vacio">No se pudieron traer los cupones (${esc(e.message)}).<br>Revisá la conexión y tocá Actualizar.</div>`;
+  }
+  btn.disabled = false; btn.textContent = '↻ Actualizar';
+  pintarHora(); pintar();
+}
+document.getElementById('btnAct').addEventListener('click', traer);
+
+// Lo último visto aparece al instante y se actualiza por detrás
+try { const g = JSON.parse(localStorage.getItem('cup:datos') || 'null'); if (g && g.cupones) { cupones = g.cupones; cuando = g.cuando; } } catch (e) {}
+pintarChips(); pintarHora(); pintar();
+traer();
+</script>
+</body>
+</html>

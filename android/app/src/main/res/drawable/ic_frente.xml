@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Un "%" blanco dentro de la zona segura del ícono (66 de 108 en el centro) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="6.5" android:strokeLineCap="round"
+        android:pathData="M68,36 L40,72" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="6"
+        android:pathData="M43,35 m-6.5,0 a6.5,6.5 0 1,0 13,0 a6.5,6.5 0 1,0 -13,0" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="6"
+        android:pathData="M65,73 m-6.5,0 a6.5,6.5 0 1,0 13,0 a6.5,6.5 0 1,0 -13,0" />
+</vector>

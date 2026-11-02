@@ -1,0 +1,42 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'ar.cupones'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'ar.cupones'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('../cupones.keystore')
+            // Las claves viven en android/firma.properties, que no se sube (el repositorio es público)
+            def f = new Properties(); f.load(new FileInputStream(rootProject.file('firma.properties')))
+            storePassword f['storePassword']
+            keyAlias 'cupones'
+            keyPassword f['keyPassword']
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false; signingConfig signingConfigs.release }
+        debug { signingConfig signingConfigs.release }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    lint { checkReleaseBuilds false; abortOnError false }
+}
+
+// La pantalla es ../../index.html + lector.js (lo mismo que se publica): se copia adentro de la app en cada compilación,
+// así sin internet se abre la copia de adentro.
+tasks.register('copiarPagina', Copy) {
+    from('../../index.html', '../../lector.js')
+    into('src/main/assets')
+}
+preBuild.dependsOn('copiarPagina')
