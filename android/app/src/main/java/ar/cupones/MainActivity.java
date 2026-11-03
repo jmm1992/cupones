@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
     static final String COPIA = "file:///android_asset/index.html";
     private WebView web;
     private volatile boolean termino = false;
+    private volatile boolean lista = false;   // la página ya se puede mostrar (ver la portada en onCreate)
     private final Handler reloj = new Handler(Looper.getMainLooper());
     private volatile boolean hayNueva = false;          // hay una app más nueva publicada
     private volatile boolean esperandoPermiso = false;  // se fue a dar el permiso de "Instalar apps"
@@ -85,6 +86,17 @@ public class MainActivity extends Activity {
         pintarBarras();
         armarWeb();
         setContentView(web);
+        // La portada de Android (con el ícono) se queda hasta que la página está lista: así no se ve una pantalla
+        // lisa en el medio. Como mucho 4 segundos, por si la página no avisa.
+        final android.view.View raiz = findViewById(android.R.id.content);
+        raiz.getViewTreeObserver().addOnPreDrawListener(new android.view.ViewTreeObserver.OnPreDrawListener() {
+            @Override public boolean onPreDraw() {
+                if (!lista) return false;
+                raiz.getViewTreeObserver().removeOnPreDrawListener(this);
+                return true;
+            }
+        });
+        reloj.postDelayed(() -> lista = true, 4000);
         buscarCambios();
         // ¿Hay una versión nueva de la app? La página se actualiza sola; esto es para lo que vive en la app.
         new Thread(() -> {
@@ -145,6 +157,7 @@ public class MainActivity extends Activity {
             }
             @Override public void onPageFinished(WebView v, String url) {
                 termino = true;
+                reloj.postDelayed(() -> lista = true, 120);   // un instante para que dibuje
                 if (hayNueva) v.evaluateJavascript("window.avisoActualizacion && avisoActualizacion()", null);
             }
             @Override
