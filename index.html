@@ -24,17 +24,17 @@ button{font:inherit;color:inherit}
 
 /* ── Encabezado ── */
 header{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);background:var(--vidrio);border-bottom:1px solid var(--borde)}
-.cab{max-width:760px;margin:0 auto;padding:14px 16px 12px}
+.cab{max-width:760px;margin:0 auto;padding:9px 16px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .logo{display:flex;align-items:center;gap:10px}
-.logo i{font-style:normal;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#C4B5FD,#7C3AED 60%,#5B21B6);color:#fff;font-weight:900;font-size:19px;box-shadow:0 6px 16px -6px rgba(124,58,237,.7)}
-.logo b{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.logo i{font-style:normal;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#C4B5FD,#7C3AED 60%,#5B21B6);color:#fff;font-weight:900;font-size:19px;box-shadow:0 6px 16px -6px rgba(124,58,237,.7)}
+.logo b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
 .logo small{display:block;font-size:12px;color:var(--suave)}
-.recarga{width:40px;height:40px;border-radius:12px;border:1px solid var(--borde);background:var(--tarjeta);display:grid;place-items:center;cursor:pointer;font-size:18px;box-shadow:var(--sombra)}
+.recarga{width:34px;height:34px;border-radius:12px;border:1px solid var(--borde);background:var(--tarjeta);display:grid;place-items:center;cursor:pointer;font-size:18px;box-shadow:var(--sombra)}
 .recarga.gira span{display:inline-block;animation:gira 1s linear infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
 
-.etq{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--suave);margin:14px 0 8px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.etq{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--suave);margin:12px 0 7px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
 .etq button{border:0;background:none;color:var(--violeta);font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;cursor:pointer;padding:0}
 .fila{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px;scroll-padding:16px}
 .fila::-webkit-scrollbar{display:none}
@@ -42,21 +42,21 @@ header{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.6) blur(16px)
 .fila.arrastrando *{pointer-events:none}
 /* Carrusel: flechas a los costados cuando hay más para ver (en la PC no se puede deslizar con el dedo) */
 .carr{position:relative}
-.carr .fl{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--borde);background:var(--tarjeta);box-shadow:var(--sombra);display:grid;place-items:center;font-size:20px;font-weight:700;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s}
-.carr .fl.izq{left:-6px}.carr .fl.der{right:-6px}
+.carr .fl{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:28px;height:28px;border-radius:50%;border:1px solid var(--borde);background:var(--tarjeta);box-shadow:var(--sombra);display:grid;place-items:center;font-size:17px;font-weight:700;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s}
+.carr .fl.izq{left:-4px}.carr .fl.der{right:-4px}
 .carr.hayIzq .fl.izq,.carr.hayDer .fl.der{opacity:1;pointer-events:auto}
-.carr::before,.carr::after{content:"";position:absolute;top:0;bottom:0;width:40px;z-index:1;pointer-events:none;opacity:0;transition:opacity .15s}
+.carr::before,.carr::after{content:"";position:absolute;top:0;bottom:0;width:56px;z-index:1;pointer-events:none;opacity:0;transition:opacity .15s}
 .carr::before{left:-16px;background:linear-gradient(90deg,var(--fondo),transparent)}
 .carr::after{right:-16px;background:linear-gradient(270deg,var(--fondo),transparent)}
 .carr.hayIzq::before,.carr.hayDer::after{opacity:1}
 @media (pointer:coarse){.carr .fl{display:none}}
 
 /* Marcas */
-.marca{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:14px;padding:6px 12px 6px 6px;cursor:pointer;transition:transform .12s,border-color .15s,background .15s}
+.marca{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:14px;padding:4px 11px 4px 4px;cursor:pointer;transition:transform .12s,border-color .15s,background .15s}
 .marca:active{transform:scale(.96)}
-.marca .lg{width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(0,0,0,.06);font-size:12px;font-weight:800;color:#555}
-.marca .lg img{width:24px;height:24px;object-fit:contain}
-.marca span{font-size:14px;font-weight:600;white-space:nowrap}
+.marca .lg{width:24px;height:24px;border-radius:7px;background:#fff;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(0,0,0,.06);font-size:12px;font-weight:800;color:#555}
+.marca .lg img{width:20px;height:20px;object-fit:contain}
+.marca span{font-size:13px;font-weight:600;white-space:nowrap}
 .marca em{font-style:normal;font-size:12px;font-weight:700;color:var(--tenue);margin-left:2px}
 .marca.on{border-color:var(--violeta);background:var(--lila)}
 .marca.on em{color:var(--violeta)}
@@ -64,11 +64,13 @@ header{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.6) blur(16px)
 .marca.ml.on span,.marca.ml.on em{color:var(--mlTexto)}
 
 /* Monto */
-.seg{flex:0 0 auto;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.seg{flex:0 0 auto;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
 .seg.on{background:var(--texto);border-color:var(--texto);color:var(--fondo)}
 
 /* ── Lista ── */
-main{max-width:760px;margin:0 auto;padding:14px 16px 48px}
+main{max-width:760px;margin:0 auto;padding:4px 16px 48px}
+.resu{text-transform:none;letter-spacing:0;font-weight:600}
+.resu b{color:var(--texto)}.resu b.v{color:var(--verde)}
 .resumen{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .dato{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:12px 14px;box-shadow:var(--sombra)}
 .dato small{display:block;font-size:11.5px;color:var(--suave);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
@@ -124,14 +126,14 @@ main{max-width:760px;margin:0 auto;padding:14px 16px 48px}
       <div class="logo"><i>%</i><div><b>Cupones</b><small id="hora">Buscando cupones…</small></div></div>
       <button class="recarga" id="btnAct" title="Actualizar" aria-label="Actualizar"><span>↻</span></button>
     </div>
-    <div class="etq"><span>Marcas</span><button id="todas">Ver todas</button></div>
-    <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="marcas"></div><button class="fl der" aria-label="Más">›</button></div>
-    <div class="etq"><span>¿Cuánto vas a gastar?</span></div>
-    <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="montos"></div><button class="fl der" aria-label="Más">›</button></div>
   </div>
 </header>
 <main>
-  <div class="resumen"><div class="dato"><small>Cupones</small><b id="dCant">–</b></div><div class="dato"><small>Mayor descuento</small><b class="v" id="dMax">–</b></div></div>
+  <div class="etq"><span>Marcas</span><button id="todas">Ver todas</button></div>
+  <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="marcas"></div><button class="fl der" aria-label="Más">›</button></div>
+  <div class="etq"><span>¿Cuánto vas a gastar?</span><span class="resu"><b id="dCant">–</b> cupones · hasta <b class="v" id="dMax">–</b></span></div>
+  <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="montos"></div><button class="fl der" aria-label="Más">›</button></div>
+  <div style="height:14px"></div>
   <div class="lista" id="lista"></div>
   <div class="pie">Cupones de <a href="https://soloprecio.com.ar/cupones" target="_blank" rel="noopener">soloprecio.com.ar</a> · pueden agotarse o cambiar sin aviso</div>
 </main>
@@ -160,7 +162,30 @@ function minimoDe(c) {
   const m = /m[ií]nima\s*\$\s*([\d.]+)/i.exec((c.condicion_principal || '') + ' ' + (c.descripcion || ''));
   return m ? Number(m[1].replace(/\./g, '')) : null;
 }
-const esCupon = (c) => !!c.codigo || /off|%|usd|\$/i.test(c.beneficio_principal || '');
+// Código de un cupón de Mercado Libre: el enlace lleva a una lista cuyo título lo dice ("EL CODIGO ES QUIMERA").
+// Lo busca la app (en el navegador de la PC Mercado Libre no deja leerlo); queda guardado por enlace.
+const codigosML = guardado('cup:codML', {});
+function codigoDeTitulo(t) {
+  if (!t || !/C[OÓ]DIGO|CUP[OÓ]N/i.test(t)) return null;
+  const p = t.trim().split(/\s+/).pop();
+  return /^[A-Z0-9]{4,}$/i.test(p) ? p.toUpperCase() : null;
+}
+window.codigoListo = (link, titulo) => {
+  if (titulo == null) { pedirCodigos.ya.delete(link); return; }   // no se pudo leer: se prueba la próxima vez
+  const c = codigoDeTitulo(titulo);
+  codigosML[link] = c || '';
+  guardar('cup:codML', codigosML);
+  pintar();
+};
+function pedirCodigos(lista) {
+  if (!window.AppCup || !AppCup.tituloDe) return;
+  for (const c of lista) if (!c.codigo && c.tienda === ML && c.link && !(c.link in codigosML) && !pedirCodigos.ya.has(c.link)) {
+    pedirCodigos.ya.add(c.link); AppCup.tituloDe(c.link);
+  }
+}
+pedirCodigos.ya = new Set();
+const codigoDe = (c) => c.codigo || codigosML[c.link] || null;
+const esCupon = (c) => !!codigoDe(c) || /off|%|usd|\$/i.test(c.beneficio_principal || '');
 function venceDe(c) {
   if (!c.vence_en) return null;
   const d = new Date(c.vence_en), h = (d - Date.now()) / 36e5;
@@ -211,18 +236,21 @@ function pintar() {
   if (!vis.length) {
     lista.innerHTML = `<div class="vacio"><b>No hay cupones con esos filtros</b>Probá con otro monto o tocá “Ver todas”.</div>`; return;
   }
+  pedirCodigos(vis);
   lista.innerHTML = vis.map((c, i) => {
     const m = minimoDe(c), v = venceDe(c), esML = c.tienda === ML;
     const condMin = m == null ? '' : m === 0 ? '<span class="pill ok">Sin compra mínima</span>' : `<span class="pill">Mínimo ${pesos(m)}</span>`;
     const etiqueta = c.etiqueta ? `<span class="pill tag">${esc(c.etiqueta)}</span>` : '';
-    const ir = c.link ? `<a class="ir ${c.codigo ? '' : 'grande'}" href="${esc(c.link)}" target="_blank" rel="noopener">${c.codigo ? 'Ir ↗' : esML ? 'Activar en Mercado Libre ↗' : 'Ver en la tienda ↗'}</a>` : '';
-    const cod = c.codigo ? `<div class="cod" data-cod="${esc(c.codigo)}"><span>${esc(c.codigo)}</span><em>Copiar</em></div>` : '';
+    const codigo = codigoDe(c), buscando = !codigo && esML && window.AppCup && AppCup.tituloDe && !(c.link in codigosML);
+    const ir = c.link ? `<a class="ir ${codigo || buscando ? '' : 'grande'}" href="${esc(c.link)}" target="_blank" rel="noopener">${codigo || buscando ? (esML ? 'Ver ↗' : 'Ir ↗') : esML ? 'Activar en Mercado Libre ↗' : 'Ver en la tienda ↗'}</a>` : '';
+    const cod = codigo ? `<div class="cod" data-cod="${esc(codigo)}"><span>${esc(codigo)}</span><em>Copiar</em></div>`
+      : buscando ? `<div class="cod"><span style="opacity:.5">Buscando código…</span></div>` : '';
     return `<article class="cup ${esML ? 'ml' : ''}" style="animation-delay:${Math.min(i, 8) * 30}ms">
       <div class="arriba">
         <div class="marcaFila"><span class="lg">${logo(c.tienda)}</span><span class="nom">${esc(c.tienda)}</span>${v ? `<span class="pill ${v.pronto ? 'pronto' : 'vence'}">${v.pronto ? '⏳ ' : ''}${v.t}</span>` : ''}</div>
         <div class="benef">${esc(c.beneficio_principal)}</div>
         ${condMin || etiqueta ? `<div class="cond">${condMin}${etiqueta}</div>` : ''}
-        ${c.descripcion ? `<p class="desc">${esc(c.descripcion)}</p>` : ''}
+        ${c.descripcion && !(codigo && /^C[oó]digo en el enlace/i.test(c.descripcion)) ? `<p class="desc">${esc(c.descripcion)}</p>` : ''}
       </div>
       <div class="corte"></div>
       <div class="abajo">${cod}${ir}</div>
@@ -233,7 +261,7 @@ function pintar() {
 function aviso(t) { const x = document.getElementById('toast'); x.textContent = t; x.classList.add('ver'); clearTimeout(aviso.r); aviso.r = setTimeout(() => x.classList.remove('ver'), 1800); }
 document.getElementById('lista').addEventListener('click', async (e) => {
   const d = e.target.closest('.desc'); if (d) { d.classList.toggle('abierta'); return; }
-  const b = e.target.closest('.cod'); if (!b) return;
+  const b = e.target.closest('.cod'); if (!b || !b.dataset.cod) return;
   const t = b.dataset.cod;
   try { if (window.AppCup) AppCup.copiar(t); else await navigator.clipboard.writeText(t); }
   catch (er) { const x = document.createElement('textarea'); x.value = t; document.body.appendChild(x); x.select(); document.execCommand('copy'); x.remove(); }

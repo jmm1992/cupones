@@ -43,6 +43,35 @@ public class MainActivity extends Activity {
                 if (cm != null) cm.setPrimaryClip(ClipData.newPlainText("Cupón", t));
             });
         }
+        /**
+         * El código de un cupón de Mercado Libre está en el título de la lista a la que lleva el enlace
+         * ("EL CODIGO ES QUIMERA"). La página no puede leerlo (Mercado Libre no lo permite desde otra web):
+         * lo lee la app y se lo devuelve con codigoListo(enlace, título).
+         */
+        @JavascriptInterface public void tituloDe(String link) {
+            new Thread(() -> {
+                String titulo = null;   // null = no se pudo leer (sin internet): la página lo vuelve a pedir otra vez
+                try {
+                    java.net.HttpURLConnection c = (java.net.HttpURLConnection) new java.net.URL(link).openConnection();
+                    c.setInstanceFollowRedirects(true);
+                    c.setConnectTimeout(10000); c.setReadTimeout(15000);
+                    c.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36");
+                    StringBuilder sb = new StringBuilder();
+                    try (java.io.BufferedReader r = new java.io.BufferedReader(new java.io.InputStreamReader(c.getInputStream(), "UTF-8"))) {
+                        char[] buf = new char[8192]; int n;
+                        while ((n = r.read(buf)) > 0 && sb.length() < 400000) {
+                            sb.append(buf, 0, n);
+                            if (sb.indexOf("og:title") >= 0 && sb.indexOf("/>", sb.indexOf("og:title")) >= 0) break;
+                        }
+                    }
+                    java.util.regex.Matcher m = java.util.regex.Pattern.compile("og:title\" content=\"([^\"]*)\"").matcher(sb);
+                    titulo = "";
+                    if (m.find()) titulo = android.text.Html.fromHtml(m.group(1), android.text.Html.FROM_HTML_MODE_LEGACY).toString();
+                } catch (Exception ignored) { }
+                String js = "window.codigoListo && codigoListo(" + org.json.JSONObject.quote(link) + "," + (titulo == null ? "null" : org.json.JSONObject.quote(titulo)) + ")";
+                runOnUiThread(() -> { if (web != null) web.evaluateJavascript(js, null); });
+            }, "titulo-ml").start();
+        }
     }
 
     @Override
