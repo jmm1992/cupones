@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
     static final String COPIA = "file:///android_asset/index.html";
     private WebView web;
     private volatile boolean termino = false;
-    private volatile boolean lista = false;   // la página ya se puede mostrar (ver la portada en onCreate)
+    private View tapa;   // la portada encima de la página mientras se dibuja (ponerTapa)
     private final Handler reloj = new Handler(Looper.getMainLooper());
     private volatile boolean hayNueva = false;          // hay una app más nueva publicada
     private volatile boolean esperandoPermiso = false;  // se fue a dar el permiso de "Instalar apps"
@@ -42,6 +42,8 @@ public class MainActivity extends Activity {
     /** Copiar un código: el portapapeles de la página no siempre anda adentro de una app. */
     class Puente {
         @JavascriptInterface public boolean hayNueva() { return hayNueva; }
+        /** La página avisa que ya dibujó lo suyo: recién ahí se saca la portada (así no se ve a medio dibujar). */
+        @JavascriptInterface public void lista() { runOnUiThread(() -> sacarTapa()); }
         @JavascriptInterface public void actualizar() { runOnUiThread(() -> empezarActualizacion()); }
         @JavascriptInterface public void copiar(String t) {
             runOnUiThread(() -> {
@@ -83,20 +85,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
-        pintarBarras();
         armarWeb();
         setContentView(web);
-        // La portada de Android (con el ícono) se queda hasta que la página está lista: así no se ve una pantalla
-        // lisa en el medio. Como mucho 4 segundos, por si la página no avisa.
-        final android.view.View raiz = findViewById(android.R.id.content);
-        raiz.getViewTreeObserver().addOnPreDrawListener(new android.view.ViewTreeObserver.OnPreDrawListener() {
-            @Override public boolean onPreDraw() {
-                if (!lista) return false;
-                raiz.getViewTreeObserver().removeOnPreDrawListener(this);
-                return true;
-            }
-        });
-        reloj.postDelayed(() -> lista = true, 4000);
+        ponerTapa();
+        reloj.postDelayed(this::sacarTapa, 4000);   // por si la página no avisa
         buscarCambios();
         // ¿Hay una versión nueva de la app? La página se actualiza sola; esto es para lo que vive en la app.
         new Thread(() -> {
@@ -155,9 +147,23 @@ public class MainActivity extends Activity {
                 try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception ignored) { }
                 return true;
             }
+            // Las letras (fuentes/*.woff2) las entrega la app desde adentro: al instante y sin internet
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView v, WebResourceRequest r) {
+                String u = r.getUrl().toString();
+                if (!u.startsWith(WEB + "fuentes/")) return null;
+                try {
+                    String nombre = r.getUrl().getLastPathSegment();
+                    WebResourceResponse res = new WebResourceResponse("font/woff2", null, getAssets().open("fuentes/" + nombre));
+                    java.util.Map<String, String> h = new java.util.HashMap<>();
+                    h.put("Access-Control-Allow-Origin", "*"); h.put("Cache-Control", "max-age=31536000");
+                    res.setResponseHeaders(h);
+                    return res;
+                } catch (Exception e) { return null; }   // si no está adentro, se baja de GitHub
+            }
             @Override public void onPageFinished(WebView v, String url) {
                 termino = true;
-                reloj.postDelayed(() -> lista = true, 120);   // un instante para que dibuje
+                reloj.postDelayed(() -> sacarTapa(), 2500);   // por si la página no avisa (AppCup.lista)
                 if (hayNueva) v.evaluateJavascript("window.avisoActualizacion && avisoActualizacion()", null);
             }
             @Override
@@ -228,6 +234,39 @@ public class MainActivity extends Activity {
 
     private boolean oscuro() {
         return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    /**
+     * La tapa: el mismo violeta con el ícono que la portada de Android, encima de la página mientras se dibuja.
+     * Antes se frenaba el dibujo de la ventana hasta que la página avisara, y eso frenaba también a la página:
+     * la portada se iba por el tope y quedaba el fondo oscuro vacío (él: "que no aparezca negra la pantalla").
+     * Ahora la página se dibuja por debajo y la tapa se va con un fundido cuando avisa que está lista.
+     */
+    private void ponerTapa() {
+        android.widget.FrameLayout t = new android.widget.FrameLayout(this);
+        if (android.os.Build.VERSION.SDK_INT >= 31) {
+            t.setBackgroundColor(getColor(R.color.violeta));
+            android.widget.ImageView ic = new android.widget.ImageView(this);
+            ic.setImageResource(R.mipmap.ic_launcher);
+            int d = Math.round(160 * getResources().getDisplayMetrics().density);   // el tamaño del ícono de la portada de Android
+            t.addView(ic, new android.widget.FrameLayout.LayoutParams(d, d, android.view.Gravity.CENTER));
+        } else t.setBackgroundResource(R.drawable.portada);
+        t.setClickable(true);
+        addContentView(t, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        tapa = t;
+        int v = getColor(R.color.violeta);
+        getWindow().setStatusBarColor(v); getWindow().setNavigationBarColor(v);
+        View dv = getWindow().getDecorView();
+        dv.setSystemUiVisibility(dv.getSystemUiVisibility() & ~(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR));
+    }
+
+    private void sacarTapa() {
+        final View t = tapa; if (t == null) return;
+        tapa = null;
+        pintarBarras();
+        t.animate().alpha(0f).setDuration(180).withEndAction(() -> {
+            ViewGroup padre = (ViewGroup) t.getParent(); if (padre != null) padre.removeView(t);
+        }).start();
     }
 
     private void pintarBarras() {

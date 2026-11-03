@@ -7,4 +7,5 @@
         <item name="android:navigationBarColor">@color/papel</item>
     </style>
     <color name="papel">#FFEFE8DA</color>
+    <color name="violeta">#FF6D28D9</color>
 </resources>

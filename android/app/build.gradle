@@ -8,8 +8,8 @@ android {
         applicationId 'ar.cupones'
         minSdk 26
         targetSdk 34
-        versionCode 8
-        versionName '2.3'
+        versionCode 9
+        versionName '2.4'
     }
 
     signingConfigs {
@@ -37,6 +37,7 @@ android {
 // así sin internet se abre la copia de adentro.
 tasks.register('copiarPagina', Copy) {
     from('../../index.html', '../../lector.js')
+    from('../../fuentes') { into('fuentes') }
     into('src/main/assets')
 }
 preBuild.dependsOn('copiarPagina')

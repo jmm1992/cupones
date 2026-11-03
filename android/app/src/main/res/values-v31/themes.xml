@@ -2,8 +2,8 @@
 <!-- Android 12 o más nuevo ya muestra su propia portada con el ícono: la ventana va lisa, si no se ven dos logos -->
 <resources>
     <style name="Tema" parent="@android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@color/papel</item>
-        <item name="android:windowSplashScreenBackground">@color/papel</item>
+        <item name="android:windowBackground">@color/violeta</item>
+        <item name="android:windowSplashScreenBackground">@color/violeta</item>
         <item name="android:statusBarColor">@color/papel</item>
         <item name="android:navigationBarColor">@color/papel</item>
     </style>
