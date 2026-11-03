@@ -4,182 +4,254 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cupones</title>
-<meta name="theme-color" content="#0F1218">
+<meta name="theme-color" content="#0B0D14">
 <style>
 :root{
-  --fondo:#F4F5F8; --tarjeta:#FFFFFF; --texto:#14171F; --suave:#5F6675; --borde:#E2E5EC;
-  --acento:#7C3AED; --acento2:#EDE7FD; --ok:#0F8A4A; --aviso:#B45309; --chip:#FFFFFF;
+  --fondo:#F3F2F8; --fondo2:#E9E6F5; --tarjeta:#FFFFFF; --texto:#12131A; --suave:#6B6F80; --tenue:#9A9EAE; --borde:#E4E2EE;
+  --violeta:#7C3AED; --violeta2:#A78BFA; --lila:#F1ECFE; --verde:#059669; --verdeF:#E6F6EF; --ambar:#B45309; --ambarF:#FEF3E2;
+  --ml:#FFE600; --mlTexto:#2D3277; --sombra:0 1px 2px rgba(20,16,40,.05),0 8px 24px -10px rgba(40,20,90,.18);
+  --vidrio:rgba(255,255,255,.78);
 }
 @media (prefers-color-scheme: dark){
-  :root{ --fondo:#0F1218; --tarjeta:#191E27; --texto:#ECEEF3; --suave:#9AA2B1; --borde:#2A303C;
-         --acento:#A78BFA; --acento2:#2A2340; --ok:#4ADE80; --aviso:#FBBF24; --chip:#191E27; }
+  :root{ --fondo:#0B0D14; --fondo2:#151826; --tarjeta:#161925; --texto:#F1F2F7; --suave:#A2A7B8; --tenue:#6E7385; --borde:#262A3A;
+         --violeta:#8B5CF6; --violeta2:#C4B5FD; --lila:#221C3B; --verde:#34D399; --verdeF:#0F2A22; --ambar:#FBBF24; --ambarF:#2B2310;
+         --sombra:0 1px 2px rgba(0,0,0,.4),0 10px 30px -12px rgba(0,0,0,.6); --vidrio:rgba(14,16,25,.78); }
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--fondo);color:var(--texto);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
-header{position:sticky;top:0;z-index:5;background:var(--tarjeta);border-bottom:1px solid var(--borde);padding:12px 16px 10px}
+html,body{margin:0;min-height:100%;color:var(--texto);font:15px/1.4 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1200px 500px at 85% -120px,rgba(139,92,246,.22),transparent 60%),radial-gradient(900px 400px at -10% -80px,rgba(255,230,0,.10),transparent 60%),var(--fondo);background-attachment:fixed}
+button{font:inherit;color:inherit}
+
+/* ── Encabezado ── */
+header{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);background:var(--vidrio);border-bottom:1px solid var(--borde)}
+.cab{max-width:760px;margin:0 auto;padding:14px 16px 12px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px}
-.logo i{font-style:normal;display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#A78BFA,#7C3AED);color:#fff;font-size:17px}
-.btn{border:1px solid var(--borde);background:var(--chip);color:var(--texto);border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;cursor:pointer}
-.etq{font-size:12px;color:var(--suave);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
-.chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-.chips::-webkit-scrollbar{display:none}
-.chips button{flex:0 0 auto;border:1px solid var(--borde);background:var(--chip);color:var(--texto);border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
-.chips button.on{background:#7C3AED;border-color:#7C3AED;color:#fff;font-weight:700}
-main{padding:12px 16px 40px;max-width:760px;margin:0 auto}
-.estado{color:var(--suave);font-size:13px;margin:2px 0 10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.lista{display:grid;gap:10px}
-.cup{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:13px 14px}
-.cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.tienda{font-weight:700;font-size:15px}
-.vence{font-size:12px;color:var(--suave);white-space:nowrap}
-.vence.pronto{color:var(--aviso);font-weight:700}
-.benef{font-size:22px;font-weight:800;margin:4px 0 2px;color:var(--acento)}
-.minimo{font-size:14px;color:var(--suave)}
-.minimo b{color:var(--texto)}
-.desc{font-size:13px;color:var(--suave);margin:6px 0 0}
-.tag{display:inline-block;font-size:11px;font-weight:700;background:var(--acento2);color:var(--acento);border-radius:6px;padding:2px 7px;margin-top:6px}
-.acc{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
-.cod{flex:1 1 150px;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1.5px dashed var(--acento);border-radius:10px;padding:8px 10px;background:var(--acento2);cursor:pointer;min-width:0}
-.cod span{font:700 15px ui-monospace,Consolas,monospace;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cod em{font-style:normal;font-size:12px;font-weight:700;color:var(--acento);white-space:nowrap}
-.cod.copiado em{color:var(--ok)}
-.abrir{flex:0 0 auto;display:grid;place-items:center;border-radius:10px;padding:8px 14px;background:#7C3AED;color:#fff;font-weight:700;text-decoration:none;font-size:14px}
-.sinCod{flex:1 1 150px;font-size:13px;color:var(--suave);align-self:center}
-.vacio{text-align:center;color:var(--suave);padding:40px 10px}
-.pie{color:var(--suave);font-size:12px;text-align:center;margin-top:22px}
-.pie a{color:var(--suave)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo i{font-style:normal;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#C4B5FD,#7C3AED 60%,#5B21B6);color:#fff;font-weight:900;font-size:19px;box-shadow:0 6px 16px -6px rgba(124,58,237,.7)}
+.logo b{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.logo small{display:block;font-size:12px;color:var(--suave)}
+.recarga{width:40px;height:40px;border-radius:12px;border:1px solid var(--borde);background:var(--tarjeta);display:grid;place-items:center;cursor:pointer;font-size:18px;box-shadow:var(--sombra)}
+.recarga.gira span{display:inline-block;animation:gira 1s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+
+.etq{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--suave);margin:14px 0 8px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.etq button{border:0;background:none;color:var(--violeta);font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;cursor:pointer;padding:0}
+.fila{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px;scroll-padding:16px}
+.fila::-webkit-scrollbar{display:none}
+
+/* Marcas */
+.marca{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:14px;padding:6px 12px 6px 6px;cursor:pointer;transition:transform .12s,border-color .15s,background .15s}
+.marca:active{transform:scale(.96)}
+.marca .lg{width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(0,0,0,.06);font-size:12px;font-weight:800;color:#555}
+.marca .lg img{width:24px;height:24px;object-fit:contain}
+.marca span{font-size:14px;font-weight:600;white-space:nowrap}
+.marca em{font-style:normal;font-size:12px;font-weight:700;color:var(--tenue);margin-left:2px}
+.marca.on{border-color:var(--violeta);background:var(--lila)}
+.marca.on em{color:var(--violeta)}
+.marca.ml.on{border-color:#E6CF00;background:var(--ml)}
+.marca.ml.on span,.marca.ml.on em{color:var(--mlTexto)}
+
+/* Monto */
+.seg{flex:0 0 auto;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.seg.on{background:var(--texto);border-color:var(--texto);color:var(--fondo)}
+
+/* ── Lista ── */
+main{max-width:760px;margin:0 auto;padding:14px 16px 48px}
+.resumen{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.dato{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:12px 14px;box-shadow:var(--sombra)}
+.dato small{display:block;font-size:11.5px;color:var(--suave);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.dato b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.dato b.v{color:var(--verde)}
+.lista{display:grid;gap:14px}
+@media (min-width:640px){.lista{grid-template-columns:1fr 1fr}}
+
+.cup{position:relative;background:var(--tarjeta);border:1px solid var(--borde);border-radius:20px;box-shadow:var(--sombra);overflow:hidden;animation:entra .35s ease both}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}}
+.cup.ml::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,#FFE600,#FFD000)}
+.arriba{padding:16px 16px 14px}
+.marcaFila{display:flex;align-items:center;gap:10px}
+.marcaFila .lg{width:36px;height:36px;border-radius:11px;background:#fff;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(0,0,0,.07);flex:0 0 auto;font-weight:800;color:#555}
+.marcaFila .lg img{width:28px;height:28px;object-fit:contain}
+.marcaFila .nom{font-weight:700;font-size:14.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;border-radius:999px;padding:4px 9px;white-space:nowrap}
+.pill.vence{background:var(--fondo2);color:var(--suave)}
+.pill.pronto{background:var(--ambarF);color:var(--ambar)}
+.benef{font-size:30px;font-weight:900;letter-spacing:-.03em;margin:12px 0 2px;line-height:1.05;background:linear-gradient(135deg,var(--violeta),var(--violeta2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cup.ml .benef{background:none;color:var(--texto)}
+.cond{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cond .pill{background:var(--fondo2);color:var(--texto);font-weight:600}
+.cond .pill.ok{background:var(--verdeF);color:var(--verde)}
+.cond .pill.tag{background:var(--lila);color:var(--violeta)}
+.desc{font-size:13px;color:var(--suave);margin:10px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.desc.abierta{-webkit-line-clamp:unset}
+/* corte de ticket */
+.corte{position:relative;height:0;border-top:2px dashed var(--borde);margin:0 18px}
+.corte::before,.corte::after{content:"";position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:var(--fondo);border:1px solid var(--borde)}
+.corte::before{left:-29px}.corte::after{right:-29px}
+.abajo{display:flex;gap:8px;padding:14px 16px 16px;align-items:stretch}
+.cod{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:12px;padding:10px 12px;background:var(--lila);border:1.5px dashed var(--violeta2);cursor:pointer;transition:background .15s}
+.cod span{font:800 15px ui-monospace,"SF Mono",Consolas,monospace;letter-spacing:.06em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cod em{font-style:normal;font-size:12px;font-weight:800;color:var(--violeta);white-space:nowrap}
+.cod.copiado{background:var(--verdeF);border-color:var(--verde)}
+.cod.copiado em{color:var(--verde)}
+.ir{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;padding:10px 16px;font-weight:800;font-size:14px;text-decoration:none;color:#fff;background:linear-gradient(135deg,#8B5CF6,#6D28D9);box-shadow:0 6px 14px -6px rgba(109,40,217,.7)}
+.ir.grande{flex:1}
+.cup.ml .ir{background:var(--ml);color:var(--mlTexto);box-shadow:0 6px 14px -6px rgba(200,170,0,.7)}
+.vacio{text-align:center;color:var(--suave);padding:50px 16px;background:var(--tarjeta);border:1px dashed var(--borde);border-radius:20px}
+.vacio b{display:block;font-size:17px;color:var(--texto);margin-bottom:4px}
+.pie{color:var(--tenue);font-size:12px;text-align:center;margin-top:26px}
+.pie a{color:var(--tenue)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--texto);color:var(--fondo);padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;transition:.25s;pointer-events:none;z-index:20}
+.toast.ver{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
 <header>
-  <div class="top">
-    <div class="logo"><i>%</i>Cupones</div>
-    <button class="btn" id="btnAct">↻ Actualizar</button>
+  <div class="cab">
+    <div class="top">
+      <div class="logo"><i>%</i><div><b>Cupones</b><small id="hora">Buscando cupones…</small></div></div>
+      <button class="recarga" id="btnAct" title="Actualizar" aria-label="Actualizar"><span>↻</span></button>
+    </div>
+    <div class="etq"><span>Marcas</span><button id="todas">Ver todas</button></div>
+    <div class="fila" id="marcas"></div>
+    <div class="etq"><span>¿Cuánto vas a gastar?</span></div>
+    <div class="fila" id="montos"></div>
   </div>
-  <div class="etq">¿Cuánto vas a gastar?</div>
-  <div class="chips" id="chips"></div>
 </header>
 <main>
-  <div class="estado"><span id="cuenta"></span><span id="hora"></span></div>
-  <div class="lista" id="lista"><div class="vacio">Cargando cupones…</div></div>
-  <div class="pie">Cupones de <a href="https://soloprecio.com.ar/cupones" target="_blank" rel="noopener">soloprecio.com.ar</a>. Pueden agotarse o cambiar sin aviso.</div>
+  <div class="resumen"><div class="dato"><small>Cupones</small><b id="dCant">–</b></div><div class="dato"><small>Mayor descuento</small><b class="v" id="dMax">–</b></div></div>
+  <div class="lista" id="lista"></div>
+  <div class="pie">Cupones de <a href="https://soloprecio.com.ar/cupones" target="_blank" rel="noopener">soloprecio.com.ar</a> · pueden agotarse o cambiar sin aviso</div>
 </main>
+<div class="toast" id="toast"></div>
 <script src="lector.js"></script>
 <script>
 const FUENTE = 'https://soloprecio.com.ar/cupones';
-// Hasta cuánto se va a gastar: se muestran los cupones cuya compra mínima entra en ese monto
+const ML = 'Mercado Libre';
 const TOPES = [
-  { t: 'Todos', v: Infinity },
-  { t: 'Sin mínimo', v: 0 },
-  { t: 'Hasta $50.000', v: 50000 },
-  { t: 'Hasta $100.000', v: 100000 },
-  { t: 'Hasta $300.000', v: 300000 },
-  { t: 'Hasta $500.000', v: 500000 },
-  { t: 'Hasta $1.000.000', v: 1000000 },
+  { t: 'Cualquier monto', v: Infinity }, { t: 'Sin mínimo', v: 0 }, { t: 'Hasta $50 mil', v: 50000 },
+  { t: 'Hasta $100 mil', v: 100000 }, { t: 'Hasta $300 mil', v: 300000 }, { t: 'Hasta $500 mil', v: 500000 }, { t: 'Hasta $1 millón', v: 1000000 },
 ];
-let tope = Infinity;
-try { const g = localStorage.getItem('cup:tope'); if (g !== null) tope = g === 'inf' ? Infinity : Number(g); } catch (e) {}
+const guardado = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
+const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+let tope = guardado('cup:tope2', null); tope = tope === null ? Infinity : tope;
+let marcasSel = new Set(guardado('cup:marcas', [ML]));   // arranca con Mercado Libre; vacío = todas
 let cupones = [], cuando = null;
 
 const pesos = (n) => '$' + Math.round(n).toLocaleString('es-AR');
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const slug = (t) => String(t).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const logo = (t) => `<img src="https://soloprecio.com.ar/brands/${slug(t)}.png?v=27" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(String(t).slice(0, 1).toUpperCase())}'))">`;
 
-// Compra mínima en pesos (0 = sin mínimo; null = no se sabe)
 function minimoDe(c) {
   if (typeof c.compra_minima === 'number') return c.compra_minima;
   const m = /m[ií]nima\s*\$\s*([\d.]+)/i.exec((c.condicion_principal || '') + ' ' + (c.descripcion || ''));
   return m ? Number(m[1].replace(/\./g, '')) : null;
 }
-// Es un cupón de verdad (no un "Ver ofertas" genérico)
 const esCupon = (c) => !!c.codigo || /off|%|usd|\$/i.test(c.beneficio_principal || '');
-
-function venceTexto(c) {
-  if (!c.vence_en) return { t: '', pronto: false };
+function venceDe(c) {
+  if (!c.vence_en) return null;
   const d = new Date(c.vence_en), h = (d - Date.now()) / 36e5;
-  if (h < 0) return { t: 'vencido', pronto: true };
-  if (h < 24) return { t: 'vence hoy', pronto: true };
-  if (h < 48) return { t: 'vence mañana', pronto: true };
-  return { t: 'hasta el ' + d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' }), pronto: false };
+  if (h < 0) return { t: 'Vencido', pronto: true, fuera: true };
+  if (h < 1) return { t: 'Vence en minutos', pronto: true };
+  if (h < 24) return { t: `Vence en ${Math.floor(h)} h`, pronto: true };
+  if (h < 48) return { t: 'Vence mañana', pronto: true };
+  return { t: 'Hasta el ' + d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' }).replace('.', ''), pronto: false };
 }
+const vigentes = () => cupones.filter((c) => esCupon(c) && !(venceDe(c) || {}).fuera);
+const entraEnMonto = (c) => { if (tope === Infinity) return true; const m = minimoDe(c); return m == null ? tope > 0 : m <= tope; };
 
-function pintarChips() {
-  document.getElementById('chips').innerHTML = TOPES.map((x, i) =>
-    `<button data-i="${i}" class="${x.v === tope ? 'on' : ''}">${x.t}</button>`).join('');
+function pintarMarcas() {
+  const cuenta = {};
+  for (const c of vigentes()) if (entraEnMonto(c)) cuenta[c.tienda] = (cuenta[c.tienda] || 0) + 1;
+  const nombres = [...new Set(vigentes().map((c) => c.tienda))]
+    .sort((a, b) => (a === ML ? -1 : b === ML ? 1 : (cuenta[b] || 0) - (cuenta[a] || 0) || a.localeCompare(b)));
+  document.getElementById('marcas').innerHTML = nombres.map((t) =>
+    `<button class="marca ${t === ML ? 'ml' : ''} ${marcasSel.has(t) ? 'on' : ''}" data-m="${esc(t)}">
+       <span class="lg">${logo(t)}</span><span>${esc(t)}</span><em>${cuenta[t] || 0}</em></button>`).join('');
+  document.getElementById('todas').textContent = marcasSel.size ? 'Ver todas' : '';
 }
-document.getElementById('chips').addEventListener('click', (e) => {
-  const b = e.target.closest('button'); if (!b) return;
-  tope = TOPES[b.dataset.i].v;
-  try { localStorage.setItem('cup:tope', tope === Infinity ? 'inf' : String(tope)); } catch (e2) {}
-  pintarChips(); pintar();
+function pintarMontos() {
+  document.getElementById('montos').innerHTML = TOPES.map((x, i) => `<button class="seg ${x.v === tope ? 'on' : ''}" data-i="${i}">${x.t}</button>`).join('');
+}
+document.getElementById('marcas').addEventListener('click', (e) => {
+  const b = e.target.closest('.marca'); if (!b) return;
+  const m = b.dataset.m; marcasSel.has(m) ? marcasSel.delete(m) : marcasSel.add(m);
+  guardar('cup:marcas', [...marcasSel]); pintarMarcas(); pintar();
+});
+document.getElementById('todas').addEventListener('click', () => { marcasSel.clear(); guardar('cup:marcas', []); pintarMarcas(); pintar(); });
+document.getElementById('montos').addEventListener('click', (e) => {
+  const b = e.target.closest('.seg'); if (!b) return;
+  tope = TOPES[b.dataset.i].v; guardar('cup:tope2', tope === Infinity ? null : tope);
+  pintarMontos(); pintarMarcas(); pintar();
 });
 
-// Primero los que tienen mínimo conocido (de menor a mayor); los que dicen "Ver condiciones", al final
-const ord = (c) => { const m = minimoDe(c); return m == null ? 1e15 : m; };
-
 function pintar() {
-  const validos = cupones.filter((c) => esCupon(c) && venceTexto(c).t !== 'vencido');
-  const vis = validos.filter((c) => {
-    if (tope === Infinity) return true;
-    const m = minimoDe(c);
-    return m == null ? tope > 0 : m <= tope;   // sin mínimo informado: entra salvo en "Sin mínimo"
-  }).sort((a, b) => ord(a) - ord(b) || (b.descuento_monto || 0) - (a.descuento_monto || 0));
   const lista = document.getElementById('lista');
-  document.getElementById('cuenta').textContent = cupones.length ? `${vis.length} ${vis.length === 1 ? 'cupón' : 'cupones'}` : '';
-  if (!cupones.length) return;
-  if (!vis.length) { lista.innerHTML = '<div class="vacio">No hay cupones para ese monto.</div>'; return; }
-  lista.innerHTML = vis.map((c) => {
-    const m = minimoDe(c), v = venceTexto(c);
-    const minTxt = m == null ? 'Ver condiciones' : m === 0 ? '<b>Sin compra mínima</b>' : `Compra mínima <b>${pesos(m)}</b>`;
-    const cod = c.codigo
-      ? `<div class="cod" data-cod="${esc(c.codigo)}"><span>${esc(c.codigo)}</span><em>Copiar</em></div>`
-      : `<div class="sinCod">${/enlace|link/i.test(c.descripcion || '') ? 'Se activa desde el enlace' : 'Sin código'}</div>`;
-    return `<div class="cup">
-      <div class="cab"><span class="tienda">${esc(c.tienda)}</span><span class="vence ${v.pronto ? 'pronto' : ''}">${v.t}</span></div>
-      <div class="benef">${esc(c.beneficio_principal)}</div>
-      <div class="minimo">${minTxt}</div>
-      ${c.etiqueta ? `<span class="tag">${esc(c.etiqueta)}</span>` : ''}
-      ${c.descripcion ? `<p class="desc">${esc(c.descripcion)}</p>` : ''}
-      <div class="acc">${cod}${c.link ? `<a class="abrir" href="${esc(c.link)}" target="_blank" rel="noopener">Abrir ↗</a>` : ''}</div>
-    </div>`;
+  if (!cupones.length) { lista.innerHTML = '<div class="vacio"><b>Cargando cupones…</b>Un segundo.</div>'; return; }
+  const vis = vigentes().filter((c) => (!marcasSel.size || marcasSel.has(c.tienda)) && entraEnMonto(c))
+    .sort((a, b) => (a.tienda === ML ? 0 : 1) - (b.tienda === ML ? 0 : 1)
+      || (minimoDe(a) ?? 1e15) - (minimoDe(b) ?? 1e15) || (b.descuento_monto || 0) - (a.descuento_monto || 0));
+  document.getElementById('dCant').textContent = vis.length;
+  const max = vis.reduce((m, c) => Math.max(m, c.descuento_monto && c.descuento_monto > 200 ? c.descuento_monto : 0), 0);
+  const maxPct = vis.reduce((m, c) => { const p = /(\d+)\s*%/.exec(c.beneficio_principal || ''); return p ? Math.max(m, +p[1]) : m; }, 0);
+  document.getElementById('dMax').textContent = max ? pesos(max) : maxPct ? maxPct + '% OFF' : '–';
+  if (!vis.length) {
+    lista.innerHTML = `<div class="vacio"><b>No hay cupones con esos filtros</b>Probá con otro monto o tocá “Ver todas”.</div>`; return;
+  }
+  lista.innerHTML = vis.map((c, i) => {
+    const m = minimoDe(c), v = venceDe(c), esML = c.tienda === ML;
+    const condMin = m == null ? '' : m === 0 ? '<span class="pill ok">Sin compra mínima</span>' : `<span class="pill">Mínimo ${pesos(m)}</span>`;
+    const etiqueta = c.etiqueta ? `<span class="pill tag">${esc(c.etiqueta)}</span>` : '';
+    const ir = c.link ? `<a class="ir ${c.codigo ? '' : 'grande'}" href="${esc(c.link)}" target="_blank" rel="noopener">${c.codigo ? 'Ir ↗' : esML ? 'Activar en Mercado Libre ↗' : 'Ver en la tienda ↗'}</a>` : '';
+    const cod = c.codigo ? `<div class="cod" data-cod="${esc(c.codigo)}"><span>${esc(c.codigo)}</span><em>Copiar</em></div>` : '';
+    return `<article class="cup ${esML ? 'ml' : ''}" style="animation-delay:${Math.min(i, 8) * 30}ms">
+      <div class="arriba">
+        <div class="marcaFila"><span class="lg">${logo(c.tienda)}</span><span class="nom">${esc(c.tienda)}</span>${v ? `<span class="pill ${v.pronto ? 'pronto' : 'vence'}">${v.pronto ? '⏳ ' : ''}${v.t}</span>` : ''}</div>
+        <div class="benef">${esc(c.beneficio_principal)}</div>
+        ${condMin || etiqueta ? `<div class="cond">${condMin}${etiqueta}</div>` : ''}
+        ${c.descripcion ? `<p class="desc">${esc(c.descripcion)}</p>` : ''}
+      </div>
+      <div class="corte"></div>
+      <div class="abajo">${cod}${ir}</div>
+    </article>`;
   }).join('');
 }
 
+function aviso(t) { const x = document.getElementById('toast'); x.textContent = t; x.classList.add('ver'); clearTimeout(aviso.r); aviso.r = setTimeout(() => x.classList.remove('ver'), 1800); }
 document.getElementById('lista').addEventListener('click', async (e) => {
+  const d = e.target.closest('.desc'); if (d) { d.classList.toggle('abierta'); return; }
   const b = e.target.closest('.cod'); if (!b) return;
   const t = b.dataset.cod;
   try { if (window.AppCup) AppCup.copiar(t); else await navigator.clipboard.writeText(t); }
   catch (er) { const x = document.createElement('textarea'); x.value = t; document.body.appendChild(x); x.select(); document.execCommand('copy'); x.remove(); }
-  b.classList.add('copiado'); b.querySelector('em').textContent = '✓ Copiado';
+  b.classList.add('copiado'); b.querySelector('em').textContent = '✓ Copiado'; aviso('Código ' + t + ' copiado');
   setTimeout(() => { b.classList.remove('copiado'); b.querySelector('em').textContent = 'Copiar'; }, 2000);
 });
 
 function pintarHora() {
-  document.getElementById('hora').textContent = cuando ? 'Actualizado ' + new Date(cuando).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+  document.getElementById('hora').textContent = cuando ? 'Actualizado a las ' + new Date(cuando).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }) : 'Buscando cupones…';
 }
+function pintarTodo() { pintarMarcas(); pintarMontos(); pintarHora(); pintar(); }
 
 async function traer() {
-  const btn = document.getElementById('btnAct');
-  btn.disabled = true; btn.textContent = '↻ Buscando…';
+  const btn = document.getElementById('btnAct'); btn.classList.add('gira'); btn.disabled = true;
   try {
     const r = await fetch(FUENTE + '?t=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('la página contestó ' + r.status);
-    cupones = leerCupones(await r.text());
-    cuando = Date.now();
-    try { localStorage.setItem('cup:datos', JSON.stringify({ cupones, cuando })); } catch (e) {}
+    cupones = leerCupones(await r.text()); cuando = Date.now();
+    guardar('cup:datos', { cupones, cuando });
+    pintarTodo();
   } catch (e) {
-    if (!cupones.length) document.getElementById('lista').innerHTML =
-      `<div class="vacio">No se pudieron traer los cupones (${esc(e.message)}).<br>Revisá la conexión y tocá Actualizar.</div>`;
+    if (!cupones.length) document.getElementById('lista').innerHTML = `<div class="vacio"><b>No se pudieron traer los cupones</b>${esc(e.message)}. Revisá la conexión y tocá ↻.</div>`;
+    else aviso('Sin conexión: se muestran los últimos cupones');
   }
-  btn.disabled = false; btn.textContent = '↻ Actualizar';
-  pintarHora(); pintar();
+  btn.classList.remove('gira'); btn.disabled = false;
 }
 document.getElementById('btnAct').addEventListener('click', traer);
 
-// Lo último visto aparece al instante y se actualiza por detrás
-try { const g = JSON.parse(localStorage.getItem('cup:datos') || 'null'); if (g && g.cupones) { cupones = g.cupones; cuando = g.cuando; } } catch (e) {}
-pintarChips(); pintarHora(); pintar();
-traer();
+const g = guardado('cup:datos', null); if (g && g.cupones) { cupones = g.cupones; cuando = g.cuando; }
+pintarTodo(); traer();
 </script>
 </body>
 </html>
