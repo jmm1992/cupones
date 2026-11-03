@@ -125,12 +125,14 @@ public class MainActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     private void armarWeb() {
         web = new WebView(this);
-        web.setBackgroundColor(oscuro() ? Color.parseColor("#14120E") : Color.parseColor("#EFE8DA"));
+        // Transparente: mientras la página no se dibuja se ve la portada de la ventana (el ícono), no un fondo liso
+        web.setBackgroundColor(Color.TRANSPARENT);
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);   // la página guarda el filtro elegido y los últimos cupones
         s.setAllowFileAccess(true);
-        s.setTextZoom(100);   // con la letra del celular agrandada, la página se salía del ancho
+        s.setTextZoom(100);
+        s.setUserAgentString(s.getUserAgentString() + " CuponesApp/" + versionApp());   // con la letra del celular agrandada, la página se salía del ancho
         web.addJavascriptInterface(new Puente(), "AppCup");
         web.setWebViewClient(new WebViewClient() {
             // La página propia se abre acá; los enlaces de los cupones, afuera (Mercado Libre abre su app)
@@ -205,6 +207,10 @@ public class MainActivity extends Activity {
     public void onConfigurationChanged(Configuration c) {
         super.onConfigurationChanged(c);
         pintarBarras();
+    }
+
+    private String versionApp() {
+        try { return getPackageManager().getPackageInfo(getPackageName(), 0).versionName; } catch (Exception e) { return "?"; }
     }
 
     private boolean oscuro() {

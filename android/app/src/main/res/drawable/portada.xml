@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- La portada mientras arranca: el papel de la app con el ícono en el centro (en vez de una pantalla lisa) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/papel" />
+    <item android:width="132dp" android:height="132dp" android:gravity="center">
+        <layer-list>
+            <item><shape android:shape="rectangle"><corners android:radius="34dp" />
+                <gradient android:angle="300" android:startColor="#FFB197FC" android:centerColor="#FF7C3AED" android:endColor="#FF4C1D95" /></shape></item>
+            <item android:drawable="@drawable/ic_frente" />
+        </layer-list>
+    </item>
+</layer-list>
