@@ -38,6 +38,18 @@ header{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.6) blur(16px)
 .etq button{border:0;background:none;color:var(--violeta);font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;cursor:pointer;padding:0}
 .fila{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px;scroll-padding:16px}
 .fila::-webkit-scrollbar{display:none}
+.fila.arrastrando{cursor:grabbing;user-select:none}
+.fila.arrastrando *{pointer-events:none}
+/* Carrusel: flechas a los costados cuando hay más para ver (en la PC no se puede deslizar con el dedo) */
+.carr{position:relative}
+.carr .fl{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--borde);background:var(--tarjeta);box-shadow:var(--sombra);display:grid;place-items:center;font-size:20px;font-weight:700;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s}
+.carr .fl.izq{left:-6px}.carr .fl.der{right:-6px}
+.carr.hayIzq .fl.izq,.carr.hayDer .fl.der{opacity:1;pointer-events:auto}
+.carr::before,.carr::after{content:"";position:absolute;top:0;bottom:0;width:40px;z-index:1;pointer-events:none;opacity:0;transition:opacity .15s}
+.carr::before{left:-16px;background:linear-gradient(90deg,var(--fondo),transparent)}
+.carr::after{right:-16px;background:linear-gradient(270deg,var(--fondo),transparent)}
+.carr.hayIzq::before,.carr.hayDer::after{opacity:1}
+@media (pointer:coarse){.carr .fl{display:none}}
 
 /* Marcas */
 .marca{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:14px;padding:6px 12px 6px 6px;cursor:pointer;transition:transform .12s,border-color .15s,background .15s}
@@ -113,9 +125,9 @@ main{max-width:760px;margin:0 auto;padding:14px 16px 48px}
       <button class="recarga" id="btnAct" title="Actualizar" aria-label="Actualizar"><span>↻</span></button>
     </div>
     <div class="etq"><span>Marcas</span><button id="todas">Ver todas</button></div>
-    <div class="fila" id="marcas"></div>
+    <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="marcas"></div><button class="fl der" aria-label="Más">›</button></div>
     <div class="etq"><span>¿Cuánto vas a gastar?</span></div>
-    <div class="fila" id="montos"></div>
+    <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="montos"></div><button class="fl der" aria-label="Más">›</button></div>
   </div>
 </header>
 <main>
@@ -233,6 +245,37 @@ function pintarHora() {
   document.getElementById('hora').textContent = cuando ? 'Actualizado a las ' + new Date(cuando).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }) : 'Buscando cupones…';
 }
 function pintarTodo() { pintarMarcas(); pintarMontos(); pintarHora(); pintar(); }
+
+// Carruseles: flechas, ruedita y arrastre con el mouse (en el celular se desliza con el dedo como siempre)
+let arrastro = false;
+document.querySelectorAll('.carr').forEach((carr) => {
+  const f = carr.querySelector('.fila');
+  const marcar = () => {
+    carr.classList.toggle('hayIzq', f.scrollLeft > 4);
+    carr.classList.toggle('hayDer', f.scrollLeft + f.clientWidth < f.scrollWidth - 4);
+  };
+  f.addEventListener('scroll', marcar, { passive: true });
+  new ResizeObserver(marcar).observe(f);
+  new MutationObserver(marcar).observe(f, { childList: true });
+  carr.querySelector('.izq').addEventListener('click', () => f.scrollBy({ left: -f.clientWidth * 0.8, behavior: 'smooth' }));
+  carr.querySelector('.der').addEventListener('click', () => f.scrollBy({ left: f.clientWidth * 0.8, behavior: 'smooth' }));
+  f.addEventListener('wheel', (e) => {
+    if (f.scrollWidth <= f.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault(); f.scrollLeft += e.deltaY;
+  }, { passive: false });
+  let x0 = 0, s0 = 0, abajo = false;
+  f.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' || e.button !== 0) return; abajo = true; arrastro = false; x0 = e.clientX; s0 = f.scrollLeft; });
+  window.addEventListener('pointermove', (e) => {
+    if (!abajo) return;
+    const dx = e.clientX - x0;
+    if (!arrastro && Math.abs(dx) > 6) { arrastro = true; f.classList.add('arrastrando'); }
+    if (arrastro) f.scrollLeft = s0 - dx;
+  });
+  window.addEventListener('pointerup', () => { if (!abajo) return; abajo = false; f.classList.remove('arrastrando'); setTimeout(() => { arrastro = false; }, 0); });
+  marcar();
+});
+// Si se arrastró, el clic que viene después no elige nada
+document.addEventListener('click', (e) => { if (arrastro && e.target.closest('.fila')) { e.stopPropagation(); e.preventDefault(); } }, true);
 
 async function traer() {
   const btn = document.getElementById('btnAct'); btn.classList.add('gira'); btn.disabled = true;
