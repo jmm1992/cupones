@@ -34,9 +34,14 @@ public class MainActivity extends Activity {
     private WebView web;
     private volatile boolean termino = false;
     private final Handler reloj = new Handler(Looper.getMainLooper());
+    private volatile boolean hayNueva = false;          // hay una app más nueva publicada
+    private volatile boolean esperandoPermiso = false;  // se fue a dar el permiso de "Instalar apps"
+    private volatile boolean aMano = false;             // se tocó "Actualizar": al salir no se instala en silencio
 
     /** Copiar un código: el portapapeles de la página no siempre anda adentro de una app. */
     class Puente {
+        @JavascriptInterface public boolean hayNueva() { return hayNueva; }
+        @JavascriptInterface public void actualizar() { runOnUiThread(() -> empezarActualizacion()); }
         @JavascriptInterface public void copiar(String t) {
             runOnUiThread(() -> {
                 ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -80,6 +85,40 @@ public class MainActivity extends Activity {
         pintarBarras();
         armarWeb();
         setContentView(web);
+        // ¿Hay una versión nueva de la app? La página se actualiza sola; esto es para lo que vive en la app.
+        new Thread(() -> {
+            if (Actualizacion.publicada() > Actualizacion.miVersion(this)) {
+                hayNueva = true;
+                runOnUiThread(() -> web.evaluateJavascript("window.avisoActualizacion && avisoActualizacion()", null));
+            }
+        }, "ver-actualizacion").start();
+    }
+
+    /** "Actualizar" en el cartel de la página: pide el permiso si falta (y sigue al volver) o baja e instala. */
+    private void empezarActualizacion() {
+        aMano = true;
+        if (!getPackageManager().canRequestPackageInstalls()) {
+            esperandoPermiso = true;
+            estado("Activá «Permitir desde esta fuente» y volvé: la actualización sigue sola");
+            try { startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getPackageName()))); }
+            catch (Exception ignored) { }
+            return;
+        }
+        estado("Descargando la versión nueva…");
+        new Thread(() -> Actualizacion.instalar(this, false), "actualizar").start();
+    }
+
+    /** Muestra en el cartel de la página cómo va la actualización. */
+    void estado(String texto) {
+        String js = "window.estadoActualizacion && estadoActualizacion(" + org.json.JSONObject.quote(texto) + ")";
+        runOnUiThread(() -> { if (web != null) web.evaluateJavascript(js, null); });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Al salir, si hay una versión nueva se instala sola (como Precios Día y CamCasa)
+        if (!aMano) new Thread(() -> Actualizacion.instalarSiHay(this), "actualizar-sola").start();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -100,7 +139,10 @@ public class MainActivity extends Activity {
                 try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception ignored) { }
                 return true;
             }
-            @Override public void onPageFinished(WebView v, String url) { termino = true; }
+            @Override public void onPageFinished(WebView v, String url) {
+                termino = true;
+                if (hayNueva) v.evaluateJavascript("window.avisoActualizacion && avisoActualizacion()", null);
+            }
             @Override
             public void onReceivedError(WebView v, WebResourceRequest r, WebResourceError e) {
                 if (r.isForMainFrame() && r.getUrl().toString().startsWith(WEB)) v.loadUrl(COPIA);
@@ -125,8 +167,8 @@ public class MainActivity extends Activity {
         cargar();
     }
 
-    /** Hoy abre la página que trae adentro. Si algún día se publica en GitHub Pages, ACA_WEB = true la toma de ahí. */
-    static final boolean ACA_WEB = false;
+    /** Abre la página publicada en GitHub Pages (cada cambio llega solo); sin internet, la copia de adentro. */
+    static final boolean ACA_WEB = true;
     private void cargar() {
         termino = false;
         if (!ACA_WEB) { web.loadUrl(COPIA); return; }
@@ -138,6 +180,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (esperandoPermiso && getPackageManager().canRequestPackageInstalls()) { esperandoPermiso = false; empezarActualizacion(); }
         if (web != null && termino) {
             final boolean[] contesto = {false};
             final WebView esta = web;

@@ -4,324 +4,335 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cupones</title>
-<meta name="theme-color" content="#0B0D14">
+<meta name="theme-color" content="#EFE8DA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120E" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
 <style>
+/* Una cuponera impresa: papel, tinta, talones troquelados y sellos. */
 :root{
-  --fondo:#F3F2F8; --fondo2:#E9E6F5; --tarjeta:#FFFFFF; --texto:#12131A; --suave:#6B6F80; --tenue:#9A9EAE; --borde:#E4E2EE;
-  --violeta:#7C3AED; --violeta2:#A78BFA; --lila:#F1ECFE; --verde:#059669; --verdeF:#E6F6EF; --ambar:#B45309; --ambarF:#FEF3E2;
-  --ml:#FFE600; --mlTexto:#2D3277; --sombra:0 1px 2px rgba(20,16,40,.05),0 8px 24px -10px rgba(40,20,90,.18);
-  --vidrio:rgba(255,255,255,.78);
+  --papel:#EFE8DA; --papel2:#E6DDCB; --hoja:#FFFBF3; --tinta:#1A160F; --gris:#6F6758; --tenue:#A69D8B; --linea:#D9CFBC;
+  --rojo:#E5432A; --rojo2:#FF7A52; --amarillo:#FFE14D; --azulML:#2D3277; --verde:#1E7A4E;
+  --f-tit:"Bricolage Grotesque",system-ui,sans-serif; --f-cod:"JetBrains Mono",ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --fondo:#0B0D14; --fondo2:#151826; --tarjeta:#161925; --texto:#F1F2F7; --suave:#A2A7B8; --tenue:#6E7385; --borde:#262A3A;
-         --violeta:#8B5CF6; --violeta2:#C4B5FD; --lila:#221C3B; --verde:#34D399; --verdeF:#0F2A22; --ambar:#FBBF24; --ambarF:#2B2310;
-         --sombra:0 1px 2px rgba(0,0,0,.4),0 10px 30px -12px rgba(0,0,0,.6); --vidrio:rgba(14,16,25,.78); }
+  .montos .monto.on::before{background:var(--rojo);opacity:.55}
+  :root{ --papel:#14120E; --papel2:#1C1914; --hoja:#211D17; --tinta:#F3ECDF; --gris:#A79F8F; --tenue:#6B6457; --linea:#332E25;
+         --rojo:#FF6644; --rojo2:#FF9A70; --verde:#52C48C; }
 }
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;color:var(--texto);font:15px/1.4 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:radial-gradient(1200px 500px at 85% -120px,rgba(139,92,246,.22),transparent 60%),radial-gradient(900px 400px at -10% -80px,rgba(255,230,0,.10),transparent 60%),var(--fondo);background-attachment:fixed}
-button{font:inherit;color:inherit}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;color:var(--tinta);font:15px/1.35 var(--f-tit)}
+body{background-color:var(--papel);
+  background-image:radial-gradient(rgba(120,100,60,.10) 1px,transparent 1.2px);background-size:5px 5px;min-height:100vh}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+.env{max-width:720px;margin:0 auto;padding:0 18px}
 
-/* ── Encabezado ── */
-header{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);background:var(--vidrio);border-bottom:1px solid var(--borde)}
-.cab{max-width:760px;margin:0 auto;padding:9px 16px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.logo{display:flex;align-items:center;gap:10px}
-.logo i{font-style:normal;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#C4B5FD,#7C3AED 60%,#5B21B6);color:#fff;font-weight:900;font-size:19px;box-shadow:0 6px 16px -6px rgba(124,58,237,.7)}
-.logo b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
-.logo small{display:block;font-size:12px;color:var(--suave)}
-.recarga{width:34px;height:34px;border-radius:12px;border:1px solid var(--borde);background:var(--tarjeta);display:grid;place-items:center;cursor:pointer;font-size:18px;box-shadow:var(--sombra)}
-.recarga.gira span{display:inline-block;animation:gira 1s linear infinite}
+/* ── Cabecera tipo portada ── */
+.portada{padding:22px 0 6px;display:flex;align-items:flex-end;gap:14px;border-bottom:3px solid var(--tinta)}
+.portada .t{flex:1;min-width:0}
+.portada h1{margin:0;font-weight:800;font-size:46px;line-height:.86;letter-spacing:-.045em;text-transform:uppercase}
+.portada h1 span{color:var(--rojo)}
+.portada p{margin:8px 0 10px;font-size:13px;font-weight:500;color:var(--gris)}
+.sello{width:54px;height:54px;flex:0 0 auto;margin-bottom:10px;border-radius:50%;border:2.5px solid var(--tinta);display:grid;place-items:center;transform:rotate(-8deg);transition:transform .25s}
+.sello svg{width:22px;height:22px}
+.sello:active{transform:rotate(-8deg) scale(.92)}
+.sello.gira svg{animation:gira .8s linear infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
+.raya{height:1px;background:var(--tinta);margin-top:3px;opacity:.6}
 
-.etq{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--suave);margin:12px 0 7px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
-.etq button{border:0;background:none;color:var(--violeta);font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;cursor:pointer;padding:0}
-.fila{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px;scroll-padding:16px}
+/* ── Marcas: burbujas con el logo ── */
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:18px 0 10px}
+.sec h2{margin:0;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.sec small{font-size:12px;color:var(--gris);font-weight:500}
+.carr{position:relative;margin:0 -18px}
+.fila{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px 18px 4px}
 .fila::-webkit-scrollbar{display:none}
-.fila.arrastrando{cursor:grabbing;user-select:none}
-.fila.arrastrando *{pointer-events:none}
-/* Carrusel: flechas a los costados cuando hay más para ver (en la PC no se puede deslizar con el dedo) */
-.carr{position:relative}
-.carr .fl{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:28px;height:28px;border-radius:50%;border:1px solid var(--borde);background:var(--tarjeta);box-shadow:var(--sombra);display:grid;place-items:center;font-size:17px;font-weight:700;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s}
-.carr .fl.izq{left:-4px}.carr .fl.der{right:-4px}
-.carr.hayIzq .fl.izq,.carr.hayDer .fl.der{opacity:1;pointer-events:auto}
-.carr::before,.carr::after{content:"";position:absolute;top:0;bottom:0;width:56px;z-index:1;pointer-events:none;opacity:0;transition:opacity .15s}
-.carr::before{left:-16px;background:linear-gradient(90deg,var(--fondo),transparent)}
-.carr::after{right:-16px;background:linear-gradient(270deg,var(--fondo),transparent)}
-.carr.hayIzq::before,.carr.hayDer::after{opacity:1}
-@media (pointer:coarse){.carr .fl{display:none}}
+.fila.arr{cursor:grabbing;user-select:none}.fila.arr *{pointer-events:none}
+.fl{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:30px;height:30px;border-radius:50%;background:var(--tinta);color:var(--papel);display:grid;place-items:center;font-size:17px;font-weight:800;opacity:0;pointer-events:none;transition:opacity .15s}
+.fl.izq{left:6px}.fl.der{right:6px}
+.carr.hi .fl.izq,.carr.hd .fl.der{opacity:1;pointer-events:auto}
+@media (pointer:coarse){.fl{display:none}}
 
-/* Marcas */
-.marca{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:14px;padding:4px 11px 4px 4px;cursor:pointer;transition:transform .12s,border-color .15s,background .15s}
-.marca:active{transform:scale(.96)}
-.marca .lg{width:24px;height:24px;border-radius:7px;background:#fff;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(0,0,0,.06);font-size:12px;font-weight:800;color:#555}
-.marca .lg img{width:20px;height:20px;object-fit:contain}
-.marca span{font-size:13px;font-weight:600;white-space:nowrap}
-.marca em{font-style:normal;font-size:12px;font-weight:700;color:var(--tenue);margin-left:2px}
-.marca.on{border-color:var(--violeta);background:var(--lila)}
-.marca.on em{color:var(--violeta)}
-.marca.ml.on{border-color:#E6CF00;background:var(--ml)}
-.marca.ml.on span,.marca.ml.on em{color:var(--mlTexto)}
+.marca{flex:0 0 auto;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:2px 0}
+.burbuja{position:relative;width:58px;height:58px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 2px var(--linea);transition:box-shadow .15s,transform .12s;overflow:visible}
+.burbuja img{width:38px;height:38px;object-fit:contain;border-radius:6px}
+.burbuja .ini{font-weight:800;font-size:20px;color:#555}
+.burbuja .n{position:absolute;right:-4px;top:-4px;min-width:21px;height:21px;border-radius:11px;padding:0 5px;background:var(--tinta);color:var(--papel);font-size:11px;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 2px var(--papel)}
+.marca span.nom{font-size:11.5px;font-weight:700;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gris)}
+.marca:active .burbuja{transform:scale(.93)}
+.marca.on .burbuja{box-shadow:0 0 0 3px var(--rojo),0 0 0 6px var(--papel),0 0 0 7.5px var(--rojo)}
+.marca.on span.nom{color:var(--tinta)}
+.marca.ml.on .burbuja{box-shadow:0 0 0 3px var(--amarillo),0 0 0 6px var(--papel),0 0 0 7.5px #E3C200}
+.marca.todas .burbuja{background:var(--tinta);color:var(--papel);font-size:13px;font-weight:800;box-shadow:none}
+.marca.todas.on .burbuja{box-shadow:0 0 0 3px var(--rojo),0 0 0 6px var(--papel),0 0 0 7.5px var(--rojo)}
 
-/* Monto */
-.seg{flex:0 0 auto;border:1.5px solid var(--borde);background:var(--tarjeta);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
-.seg.on{background:var(--texto);border-color:var(--texto);color:var(--fondo)}
+/* ── Monto: marcas de resaltador ── */
+.monto{flex:0 0 auto;position:relative;padding:7px 12px;font-size:14.5px;font-weight:700;white-space:nowrap;color:var(--gris);border-radius:4px}
+.monto.on{color:var(--tinta)}
+.monto.on::before{content:"";position:absolute;left:4px;right:4px;bottom:6px;height:44%;background:var(--amarillo);opacity:.85;border-radius:2px;transform:skew(-8deg) rotate(-1deg);z-index:-1}
+.montos{position:relative;z-index:0}
 
-/* ── Lista ── */
-main{max-width:760px;margin:0 auto;padding:4px 16px 48px}
-.resu{text-transform:none;letter-spacing:0;font-weight:600}
-.resu b{color:var(--texto)}.resu b.v{color:var(--verde)}
-.resumen{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.dato{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:12px 14px;box-shadow:var(--sombra)}
-.dato small{display:block;font-size:11.5px;color:var(--suave);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
-.dato b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
-.dato b.v{color:var(--verde)}
-.lista{display:grid;gap:14px}
+.total{margin:18px 0 12px;font-size:13px;color:var(--gris);display:flex;align-items:center;gap:8px}
+.total b{font-family:var(--f-cod);font-size:13px;color:var(--tinta)}
+.total::after{content:"";flex:1;border-top:1.5px dashed var(--linea)}
+
+/* ── El cupón ── */
+.lista{display:grid;gap:14px;padding-bottom:40px}
 @media (min-width:640px){.lista{grid-template-columns:1fr 1fr}}
+.cup{--c:var(--rojo);--ct:#fff;position:relative;display:flex;min-height:118px;cursor:pointer;filter:drop-shadow(0 1px 0 rgba(0,0,0,.06)) drop-shadow(0 8px 14px rgba(60,40,10,.12));animation:entra .35s cubic-bezier(.2,.8,.3,1) both;transition:transform .12s}
+.cup:active{transform:rotate(-.4deg) scale(.985)}
+@keyframes entra{from{opacity:0;transform:translateY(10px) rotate(.6deg)}}
+.cup.ml{--c:var(--amarillo);--ct:var(--azulML)}
+/* talón con el descuento, separado por el troquel */
+.talon{flex:0 0 104px;background:var(--c);color:var(--ct);border-radius:14px 4px 4px 14px;padding:12px 10px;display:flex;flex-direction:column;justify-content:space-between;position:relative;
+  -webkit-mask:radial-gradient(circle 9px at 100% 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 9px at 100% 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle 9px at 100% 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 9px at 100% 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+.talon .num{font-weight:800;font-size:34px;line-height:.85;letter-spacing:-.05em;white-space:nowrap}
+.talon .num.chica{font-size:26px}
+.talon .num small{font-size:16px;letter-spacing:-.02em}
+.talon .off{font-family:var(--f-cod);font-size:11px;font-weight:800;letter-spacing:.18em;opacity:.85}
+.talon .lg{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.talon .lg img{width:22px;height:22px;object-fit:contain}
+.talon .lg .ini{font-size:13px;font-weight:800;color:#555}
+.cuerpo{flex:1;min-width:0;background:var(--hoja);border-radius:4px 14px 14px 4px;padding:12px 14px 12px 15px;display:flex;flex-direction:column;gap:7px;position:relative;
+  border-left:2px dashed var(--linea);
+  -webkit-mask:radial-gradient(circle 9px at 0 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 9px at 0 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle 9px at 0 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 9px at 0 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+.cab{display:flex;align-items:baseline;gap:8px}
+.cab .nom{flex:1;min-width:0;font-weight:800;font-size:16px;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cab .vence{font-family:var(--f-cod);font-size:10.5px;font-weight:700;letter-spacing:.04em;color:var(--gris);white-space:nowrap;text-transform:uppercase}
+.cab .vence.apuro{color:var(--rojo)}
+.letra{font-size:12.5px;color:var(--gris);font-weight:500;line-height:1.3}
+.letra b{color:var(--tinta);font-weight:700}
+.letra .tag{color:var(--rojo);font-weight:700}
+.codigo{margin-top:auto;display:flex;align-items:center;gap:10px;border:1.5px solid var(--tinta);border-radius:8px;padding:7px 8px 7px 11px;background:var(--papel)}
+.codigo span{flex:1;min-width:0;font-family:var(--f-cod);font-weight:800;font-size:16px;letter-spacing:.08em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.codigo em{font-style:normal;flex:0 0 auto;font-size:12px;font-weight:800;background:var(--tinta);color:var(--papel);border-radius:5px;padding:5px 9px;letter-spacing:.02em}
+.codigo.busca{border-style:dashed;border-color:var(--tenue)}
+.codigo.busca span{font-family:var(--f-tit);font-weight:600;font-size:13px;letter-spacing:0;color:var(--tenue)}
+.codigo.busca::after{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--tenue);border-top-color:transparent;animation:gira .8s linear infinite}
+/* el sello de COPIADO */
+.marcaCopia{position:absolute;right:16px;top:50%;font-family:var(--f-cod);font-weight:800;font-size:20px;letter-spacing:.12em;color:var(--verde);border:3px solid var(--verde);border-radius:8px;padding:4px 10px;transform:translateY(-50%) rotate(-14deg) scale(1.6);opacity:0;pointer-events:none;background:color-mix(in srgb,var(--hoja) 70%,transparent)}
+.cup.copiado .marcaCopia{animation:sellar .9s ease forwards}
+@keyframes sellar{0%{opacity:0;transform:translateY(-50%) rotate(-14deg) scale(1.6)}18%{opacity:1;transform:translateY(-50%) rotate(-14deg) scale(1)}75%{opacity:1}100%{opacity:0;transform:translateY(-50%) rotate(-14deg) scale(1)}}
 
-.cup{position:relative;background:var(--tarjeta);border:1px solid var(--borde);border-radius:20px;box-shadow:var(--sombra);overflow:hidden;animation:entra .35s ease both}
-@keyframes entra{from{opacity:0;transform:translateY(8px)}}
-.cup.ml::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,#FFE600,#FFD000)}
-.arriba{padding:16px 16px 14px}
-.marcaFila{display:flex;align-items:center;gap:10px}
-.marcaFila .lg{width:36px;height:36px;border-radius:11px;background:#fff;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(0,0,0,.07);flex:0 0 auto;font-weight:800;color:#555}
-.marcaFila .lg img{width:28px;height:28px;object-fit:contain}
-.marcaFila .nom{font-weight:700;font-size:14.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;border-radius:999px;padding:4px 9px;white-space:nowrap}
-.pill.vence{background:var(--fondo2);color:var(--suave)}
-.pill.pronto{background:var(--ambarF);color:var(--ambar)}
-.benef{font-size:30px;font-weight:900;letter-spacing:-.03em;margin:12px 0 2px;line-height:1.05;background:linear-gradient(135deg,var(--violeta),var(--violeta2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.cup.ml .benef{background:none;color:var(--texto)}
-.cond{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.cond .pill{background:var(--fondo2);color:var(--texto);font-weight:600}
-.cond .pill.ok{background:var(--verdeF);color:var(--verde)}
-.cond .pill.tag{background:var(--lila);color:var(--violeta)}
-.desc{font-size:13px;color:var(--suave);margin:10px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.desc.abierta{-webkit-line-clamp:unset}
-/* corte de ticket */
-.corte{position:relative;height:0;border-top:2px dashed var(--borde);margin:0 18px}
-.corte::before,.corte::after{content:"";position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:var(--fondo);border:1px solid var(--borde)}
-.corte::before{left:-29px}.corte::after{right:-29px}
-.abajo{display:flex;gap:8px;padding:14px 16px 16px;align-items:stretch}
-.cod{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:12px;padding:10px 12px;background:var(--lila);border:1.5px dashed var(--violeta2);cursor:pointer;transition:background .15s}
-.cod span{font:800 15px ui-monospace,"SF Mono",Consolas,monospace;letter-spacing:.06em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cod em{font-style:normal;font-size:12px;font-weight:800;color:var(--violeta);white-space:nowrap}
-.cod.copiado{background:var(--verdeF);border-color:var(--verde)}
-.cod.copiado em{color:var(--verde)}
-.ir{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;padding:10px 16px;font-weight:800;font-size:14px;text-decoration:none;color:#fff;background:linear-gradient(135deg,#8B5CF6,#6D28D9);box-shadow:0 6px 14px -6px rgba(109,40,217,.7)}
-.ir.grande{flex:1}
-.cup.ml .ir{background:var(--ml);color:var(--mlTexto);box-shadow:0 6px 14px -6px rgba(200,170,0,.7)}
-.vacio{text-align:center;color:var(--suave);padding:50px 16px;background:var(--tarjeta);border:1px dashed var(--borde);border-radius:20px}
-.vacio b{display:block;font-size:17px;color:var(--texto);margin-bottom:4px}
-.pie{color:var(--tenue);font-size:12px;text-align:center;margin-top:26px}
-.pie a{color:var(--tenue)}
-.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--texto);color:var(--fondo);padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;transition:.25s;pointer-events:none;z-index:20}
+.vacio{text-align:center;padding:44px 20px;border:2px dashed var(--linea);border-radius:16px;color:var(--gris)}
+.vacio b{display:block;font-size:20px;font-weight:800;color:var(--tinta);letter-spacing:-.02em;margin-bottom:4px}
+.pie{text-align:center;color:var(--tenue);font-size:11.5px;padding:0 0 30px;font-family:var(--f-cod)}
+
+.actu{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;z-index:40;display:flex;align-items:center;gap:10px;background:var(--tinta);color:var(--papel);border-radius:14px;padding:12px 12px 12px 16px;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);animation:entra .3s ease both}
+.actu div{flex:1;min-width:0;font-size:13px;line-height:1.3}.actu b{display:block;font-size:15px}
+.actu button{flex:0 0 auto;background:var(--rojo);color:#fff;font-weight:800;border-radius:10px;padding:9px 14px;font-size:14px}
+.actu button.no{background:transparent;color:var(--papel);opacity:.7;padding:9px 6px}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,14px);opacity:0;background:var(--tinta);color:var(--papel);padding:10px 15px;border-radius:10px;font-weight:700;font-size:13.5px;transition:.22s;pointer-events:none;z-index:30}
 .toast.ver{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
-<header>
-  <div class="cab">
-    <div class="top">
-      <div class="logo"><i>%</i><div><b>Cupones</b><small id="hora">Buscando cupones…</small></div></div>
-      <button class="recarga" id="btnAct" title="Actualizar" aria-label="Actualizar"><span>↻</span></button>
-    </div>
-  </div>
-</header>
-<main>
-  <div class="etq"><span>Marcas</span><button id="todas">Ver todas</button></div>
+<div class="env">
+  <header class="portada">
+    <div class="t"><h1>Cupo<span>nes</span></h1><p id="fecha"></p></div>
+    <button class="sello" id="btnAct" aria-label="Actualizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
+  </header>
+  <div class="raya"></div>
+
+  <div class="sec"><h2>Marcas</h2><small id="hora"></small></div>
   <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="marcas"></div><button class="fl der" aria-label="Más">›</button></div>
-  <div class="etq"><span>¿Cuánto vas a gastar?</span><span class="resu"><b id="dCant">–</b> cupones · hasta <b class="v" id="dMax">–</b></span></div>
-  <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila" id="montos"></div><button class="fl der" aria-label="Más">›</button></div>
-  <div style="height:14px"></div>
+
+  <div class="sec"><h2>¿Cuánto gastás?</h2></div>
+  <div class="carr"><button class="fl izq" aria-label="Anteriores">‹</button><div class="fila montos" id="montos"></div><button class="fl der" aria-label="Más">›</button></div>
+
+  <div class="total" id="total"></div>
   <div class="lista" id="lista"></div>
-  <div class="pie">Cupones de <a href="https://soloprecio.com.ar/cupones" target="_blank" rel="noopener">soloprecio.com.ar</a> · pueden agotarse o cambiar sin aviso</div>
-</main>
+  <div class="pie">datos de soloprecio.com.ar · pueden agotarse sin aviso</div>
+</div>
 <div class="toast" id="toast"></div>
 <script src="lector.js"></script>
 <script>
 const FUENTE = 'https://soloprecio.com.ar/cupones';
 const ML = 'Mercado Libre';
 const TOPES = [
-  { t: 'Cualquier monto', v: Infinity }, { t: 'Sin mínimo', v: 0 }, { t: 'Hasta $50 mil', v: 50000 },
-  { t: 'Hasta $100 mil', v: 100000 }, { t: 'Hasta $300 mil', v: 300000 }, { t: 'Hasta $500 mil', v: 500000 }, { t: 'Hasta $1 millón', v: 1000000 },
+  { t: 'Cualquier monto', v: Infinity }, { t: 'Sin mínimo', v: 0 }, { t: 'Hasta $50 mil', v: 50000 }, { t: 'Hasta $100 mil', v: 100000 },
+  { t: 'Hasta $300 mil', v: 300000 }, { t: 'Hasta $500 mil', v: 500000 }, { t: 'Hasta $1 millón', v: 1000000 },
 ];
-const guardado = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
+const leer = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
 const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-let tope = guardado('cup:tope2', null); tope = tope === null ? Infinity : tope;
-let marcasSel = new Set(guardado('cup:marcas', [ML]));   // arranca con Mercado Libre; vacío = todas
+let tope = leer('cup:tope2', null); if (tope === null) tope = Infinity;
+let marcasSel = new Set(leer('cup:marcas', [ML]));
 let cupones = [], cuando = null;
+const enApp = !!(window.AppCup && AppCup.tituloDe);
 
 const pesos = (n) => '$' + Math.round(n).toLocaleString('es-AR');
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const slug = (t) => String(t).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
-const logo = (t) => `<img src="https://soloprecio.com.ar/brands/${slug(t)}.png?v=27" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(String(t).slice(0, 1).toUpperCase())}'))">`;
+const logo = (t) => `<img src="https://soloprecio.com.ar/brands/${slug(t)}.png?v=27" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;ini&quot;>${esc(String(t).slice(0, 1).toUpperCase())}</span>'">`;
 
-function minimoDe(c) {
-  if (typeof c.compra_minima === 'number') return c.compra_minima;
-  const m = /m[ií]nima\s*\$\s*([\d.]+)/i.exec((c.condicion_principal || '') + ' ' + (c.descripcion || ''));
-  return m ? Number(m[1].replace(/\./g, '')) : null;
-}
-// Código de un cupón de Mercado Libre: el enlace lleva a una lista cuyo título lo dice ("EL CODIGO ES QUIMERA").
-// Lo busca la app (en el navegador de la PC Mercado Libre no deja leerlo); queda guardado por enlace.
-const codigosML = guardado('cup:codML', {});
+// Los códigos de Mercado Libre están en el título de la lista a la que lleva el enlace ("EL CODIGO ES QUIMERA").
+// Los busca la app (desde la PC Mercado Libre no deja leerlo) y quedan guardados por enlace.
+const codigosML = leer('cup:codML', {});
+const pedidos = new Set();
 function codigoDeTitulo(t) {
   if (!t || !/C[OÓ]DIGO|CUP[OÓ]N/i.test(t)) return null;
   const p = t.trim().split(/\s+/).pop();
   return /^[A-Z0-9]{4,}$/i.test(p) ? p.toUpperCase() : null;
 }
 window.codigoListo = (link, titulo) => {
-  if (titulo == null) { pedirCodigos.ya.delete(link); return; }   // no se pudo leer: se prueba la próxima vez
-  const c = codigoDeTitulo(titulo);
-  codigosML[link] = c || '';
-  guardar('cup:codML', codigosML);
-  pintar();
+  if (titulo == null) { pedidos.delete(link); return; }
+  codigosML[link] = codigoDeTitulo(titulo) || '';
+  guardar('cup:codML', codigosML); pintarTodo();
 };
-function pedirCodigos(lista) {
-  if (!window.AppCup || !AppCup.tituloDe) return;
-  for (const c of lista) if (!c.codigo && c.tienda === ML && c.link && !(c.link in codigosML) && !pedirCodigos.ya.has(c.link)) {
-    pedirCodigos.ya.add(c.link); AppCup.tituloDe(c.link);
-  }
-}
-pedirCodigos.ya = new Set();
 const codigoDe = (c) => c.codigo || codigosML[c.link] || null;
-const esCupon = (c) => !!codigoDe(c) || /off|%|usd|\$/i.test(c.beneficio_principal || '');
+const buscandoCodigo = (c) => !codigoDe(c) && enApp && c.tienda === ML && c.link && !(c.link in codigosML);
+function pedirCodigos() {
+  if (!enApp) return;
+  for (const c of cupones) if (buscandoCodigo(c) && !pedidos.has(c.link)) { pedidos.add(c.link); AppCup.tituloDe(c.link); }
+}
+
+function minimoDe(c) {
+  if (typeof c.compra_minima === 'number') return c.compra_minima;
+  const m = /m[ií]nima\s*\$\s*([\d.]+)/i.exec((c.condicion_principal || '') + ' ' + (c.descripcion || ''));
+  return m ? Number(m[1].replace(/\./g, '')) : null;
+}
 function venceDe(c) {
   if (!c.vence_en) return null;
   const d = new Date(c.vence_en), h = (d - Date.now()) / 36e5;
-  if (h < 0) return { t: 'Vencido', pronto: true, fuera: true };
-  if (h < 1) return { t: 'Vence en minutos', pronto: true };
-  if (h < 24) return { t: `Vence en ${Math.floor(h)} h`, pronto: true };
-  if (h < 48) return { t: 'Vence mañana', pronto: true };
-  return { t: 'Hasta el ' + d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' }).replace('.', ''), pronto: false };
+  if (h < 0) return { fuera: true };
+  if (h < 24) return { t: h < 1 ? 'vence ya' : `vence en ${Math.floor(h)} h`, apuro: true };
+  if (h < 48) return { t: 'vence mañana', apuro: true };
+  return { t: 'hasta ' + d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' }).replace('.', '') };
 }
-const vigentes = () => cupones.filter((c) => esCupon(c) && !(venceDe(c) || {}).fuera);
+// Sólo los que tienen un código para copiar (o lo está buscando la app)
+const conCodigo = () => cupones.filter((c) => (codigoDe(c) || buscandoCodigo(c)) && !(venceDe(c) || {}).fuera);
 const entraEnMonto = (c) => { if (tope === Infinity) return true; const m = minimoDe(c); return m == null ? tope > 0 : m <= tope; };
 
+// "$10.000 OFF" → "$10" + "mil"; "10% OFF" → "10%"
+function descuentoCorto(c) {
+  const b = (c.beneficio_principal || '').replace(/\s*OFF\s*$/i, '').trim();
+  const n = /^\$\s*([\d.]+)$/.exec(b);
+  if (n) { const v = Number(n[1].replace(/\./g, '')); return v >= 1e6 ? { n: '$' + (v / 1e6).toLocaleString('es-AR'), u: 'M' } : v >= 1000 ? { n: '$' + (v / 1000).toLocaleString('es-AR'), u: 'mil' } : { n: '$' + v, u: '' }; }
+  const usd = /^hasta\s+usd\s*(\d+)/i.exec(b); if (usd) return { n: usd[1], u: 'USD' };
+  return { n: b.length > 6 ? b.slice(0, 6) : b || '—', u: '' };
+}
+// Las marcas elegidas que hoy no tienen cupones no cuentan: si no queda ninguna, se ven todas
+function seleccionEfectiva() { const hay = new Set(conCodigo().map((c) => c.tienda)); return new Set([...marcasSel].filter((m) => hay.has(m))); }
+
 function pintarMarcas() {
-  const cuenta = {};
-  for (const c of vigentes()) if (entraEnMonto(c)) cuenta[c.tienda] = (cuenta[c.tienda] || 0) + 1;
-  const nombres = [...new Set(vigentes().map((c) => c.tienda))]
-    .sort((a, b) => (a === ML ? -1 : b === ML ? 1 : (cuenta[b] || 0) - (cuenta[a] || 0) || a.localeCompare(b)));
-  document.getElementById('marcas').innerHTML = nombres.map((t) =>
-    `<button class="marca ${t === ML ? 'ml' : ''} ${marcasSel.has(t) ? 'on' : ''}" data-m="${esc(t)}">
-       <span class="lg">${logo(t)}</span><span>${esc(t)}</span><em>${cuenta[t] || 0}</em></button>`).join('');
-  document.getElementById('todas').textContent = marcasSel.size ? 'Ver todas' : '';
+  const lista = conCodigo(), cuenta = {};
+  for (const c of lista) if (entraEnMonto(c)) cuenta[c.tienda] = (cuenta[c.tienda] || 0) + 1;
+  const nombres = [...new Set(lista.map((c) => c.tienda))].sort((a, b) => (a === ML ? -1 : b === ML ? 1 : (cuenta[b] || 0) - (cuenta[a] || 0) || a.localeCompare(b)));
+  const sel = seleccionEfectiva(), total = Object.values(cuenta).reduce((a, b) => a + b, 0);
+  document.getElementById('marcas').innerHTML =
+    `<button class="marca todas ${sel.size ? '' : 'on'}" data-todas="1"><span class="burbuja">TODAS<span class="n">${total}</span></span><span class="nom">Todas</span></button>` +
+    nombres.map((t) => `<button class="marca ${t === ML ? 'ml' : ''} ${sel.has(t) ? 'on' : ''}" data-m="${esc(t)}">
+      <span class="burbuja">${logo(t)}<span class="n">${cuenta[t] || 0}</span></span><span class="nom">${esc(t)}</span></button>`).join('');
 }
 function pintarMontos() {
-  document.getElementById('montos').innerHTML = TOPES.map((x, i) => `<button class="seg ${x.v === tope ? 'on' : ''}" data-i="${i}">${x.t}</button>`).join('');
+  document.getElementById('montos').innerHTML = TOPES.map((x, i) => `<button class="monto ${x.v === tope ? 'on' : ''}" data-i="${i}">${x.t}</button>`).join('');
 }
-document.getElementById('marcas').addEventListener('click', (e) => {
-  const b = e.target.closest('.marca'); if (!b) return;
-  const m = b.dataset.m; marcasSel.has(m) ? marcasSel.delete(m) : marcasSel.add(m);
-  guardar('cup:marcas', [...marcasSel]); pintarMarcas(); pintar();
-});
-document.getElementById('todas').addEventListener('click', () => { marcasSel.clear(); guardar('cup:marcas', []); pintarMarcas(); pintar(); });
-document.getElementById('montos').addEventListener('click', (e) => {
-  const b = e.target.closest('.seg'); if (!b) return;
-  tope = TOPES[b.dataset.i].v; guardar('cup:tope2', tope === Infinity ? null : tope);
-  pintarMontos(); pintarMarcas(); pintar();
-});
-
 function pintar() {
-  const lista = document.getElementById('lista');
-  if (!cupones.length) { lista.innerHTML = '<div class="vacio"><b>Cargando cupones…</b>Un segundo.</div>'; return; }
-  const vis = vigentes().filter((c) => (!marcasSel.size || marcasSel.has(c.tienda)) && entraEnMonto(c))
-    .sort((a, b) => (a.tienda === ML ? 0 : 1) - (b.tienda === ML ? 0 : 1)
-      || (minimoDe(a) ?? 1e15) - (minimoDe(b) ?? 1e15) || (b.descuento_monto || 0) - (a.descuento_monto || 0));
-  document.getElementById('dCant').textContent = vis.length;
-  const max = vis.reduce((m, c) => Math.max(m, c.descuento_monto && c.descuento_monto > 200 ? c.descuento_monto : 0), 0);
-  const maxPct = vis.reduce((m, c) => { const p = /(\d+)\s*%/.exec(c.beneficio_principal || ''); return p ? Math.max(m, +p[1]) : m; }, 0);
-  document.getElementById('dMax').textContent = max ? pesos(max) : maxPct ? maxPct + '% OFF' : '–';
-  if (!vis.length) {
-    lista.innerHTML = `<div class="vacio"><b>No hay cupones con esos filtros</b>Probá con otro monto o tocá “Ver todas”.</div>`; return;
-  }
-  pedirCodigos(vis);
+  const lista = document.getElementById('lista'), tot = document.getElementById('total');
+  if (!cupones.length) { tot.textContent = ''; lista.innerHTML = '<div class="vacio"><b>Buscando cupones…</b>Un segundo.</div>'; return; }
+  const sel = seleccionEfectiva();
+  const vis = conCodigo().filter((c) => (!sel.size || sel.has(c.tienda)) && entraEnMonto(c))
+    .sort((a, b) => (a.tienda === ML ? 0 : 1) - (b.tienda === ML ? 0 : 1) || (minimoDe(a) ?? 1e15) - (minimoDe(b) ?? 1e15) || (b.descuento_monto || 0) - (a.descuento_monto || 0));
+  tot.innerHTML = vis.length ? `<b>${vis.length}</b> ${vis.length === 1 ? 'código' : 'códigos'} · tocá uno para copiarlo` : '';
+  if (!vis.length) { lista.innerHTML = `<div class="vacio"><b>Nada por acá</b>Probá con otro monto o tocá “Todas”.</div>`; return; }
   lista.innerHTML = vis.map((c, i) => {
-    const m = minimoDe(c), v = venceDe(c), esML = c.tienda === ML;
-    const condMin = m == null ? '' : m === 0 ? '<span class="pill ok">Sin compra mínima</span>' : `<span class="pill">Mínimo ${pesos(m)}</span>`;
-    const etiqueta = c.etiqueta ? `<span class="pill tag">${esc(c.etiqueta)}</span>` : '';
-    const codigo = codigoDe(c), buscando = !codigo && esML && window.AppCup && AppCup.tituloDe && !(c.link in codigosML);
-    const ir = c.link ? `<a class="ir ${codigo || buscando ? '' : 'grande'}" href="${esc(c.link)}" target="_blank" rel="noopener">${codigo || buscando ? (esML ? 'Ver ↗' : 'Ir ↗') : esML ? 'Activar en Mercado Libre ↗' : 'Ver en la tienda ↗'}</a>` : '';
-    const cod = codigo ? `<div class="cod" data-cod="${esc(codigo)}"><span>${esc(codigo)}</span><em>Copiar</em></div>`
-      : buscando ? `<div class="cod"><span style="opacity:.5">Buscando código…</span></div>` : '';
-    return `<article class="cup ${esML ? 'ml' : ''}" style="animation-delay:${Math.min(i, 8) * 30}ms">
-      <div class="arriba">
-        <div class="marcaFila"><span class="lg">${logo(c.tienda)}</span><span class="nom">${esc(c.tienda)}</span>${v ? `<span class="pill ${v.pronto ? 'pronto' : 'vence'}">${v.pronto ? '⏳ ' : ''}${v.t}</span>` : ''}</div>
-        <div class="benef">${esc(c.beneficio_principal)}</div>
-        ${condMin || etiqueta ? `<div class="cond">${condMin}${etiqueta}</div>` : ''}
-        ${c.descripcion && !(codigo && /^C[oó]digo en el enlace/i.test(c.descripcion)) ? `<p class="desc">${esc(c.descripcion)}</p>` : ''}
+    const m = minimoDe(c), v = venceDe(c), d = descuentoCorto(c), cod = codigoDe(c), esML = c.tienda === ML;
+    const letra = [
+      m == null ? 'Ver condiciones en la tienda' : m === 0 ? '<b>Sin compra mínima</b>' : `Comprando desde <b>${pesos(m)}</b>`,
+      c.etiqueta ? `<span class="tag">${esc(c.etiqueta)}</span>` : '',
+    ].filter(Boolean).join(' · ');
+    return `<article class="cup ${esML ? 'ml' : ''}" ${cod ? `data-cod="${esc(cod)}"` : ''} style="animation-delay:${Math.min(i, 10) * 30}ms" title="${esc(c.descripcion || '')}">
+      <div class="talon"><span class="lg">${logo(c.tienda)}</span><div><div class="num ${(d.n + d.u).length > 5 ? 'chica' : ''}">${esc(d.n)}${d.u ? `<small> ${d.u}</small>` : ''}</div><div class="off">OFF</div></div></div>
+      <div class="cuerpo">
+        <div class="cab"><span class="nom">${esc(c.tienda)}</span>${v ? `<span class="vence ${v.apuro ? 'apuro' : ''}">${v.t}</span>` : ''}</div>
+        <div class="letra">${letra}</div>
+        ${cod ? `<div class="codigo"><span>${esc(cod)}</span><em>COPIAR</em></div>` : `<div class="codigo busca"><span>Buscando el código…</span></div>`}
+        <div class="marcaCopia">COPIADO</div>
       </div>
-      <div class="corte"></div>
-      <div class="abajo">${cod}${ir}</div>
     </article>`;
   }).join('');
 }
+function pintarTodo() { pintarMarcas(); pintarMontos(); pintarHora(); pintar(); pedirCodigos(); }
+
+document.getElementById('marcas').addEventListener('click', (e) => {
+  const b = e.target.closest('.marca'); if (!b) return;
+  if (b.dataset.todas) marcasSel.clear();
+  else { const m = b.dataset.m; const sel = seleccionEfectiva(); marcasSel = sel; sel.has(m) ? marcasSel.delete(m) : marcasSel.add(m); }
+  guardar('cup:marcas', [...marcasSel]); pintarMarcas(); pintar();
+});
+document.getElementById('montos').addEventListener('click', (e) => {
+  const b = e.target.closest('.monto'); if (!b) return;
+  tope = TOPES[b.dataset.i].v; guardar('cup:tope2', tope === Infinity ? null : tope); pintarMarcas(); pintarMontos(); pintar();
+});
 
 function aviso(t) { const x = document.getElementById('toast'); x.textContent = t; x.classList.add('ver'); clearTimeout(aviso.r); aviso.r = setTimeout(() => x.classList.remove('ver'), 1800); }
 document.getElementById('lista').addEventListener('click', async (e) => {
-  const d = e.target.closest('.desc'); if (d) { d.classList.toggle('abierta'); return; }
-  const b = e.target.closest('.cod'); if (!b || !b.dataset.cod) return;
-  const t = b.dataset.cod;
+  const card = e.target.closest('.cup[data-cod]'); if (!card) return;
+  const t = card.dataset.cod;
   try { if (window.AppCup) AppCup.copiar(t); else await navigator.clipboard.writeText(t); }
   catch (er) { const x = document.createElement('textarea'); x.value = t; document.body.appendChild(x); x.select(); document.execCommand('copy'); x.remove(); }
-  b.classList.add('copiado'); b.querySelector('em').textContent = '✓ Copiado'; aviso('Código ' + t + ' copiado');
-  setTimeout(() => { b.classList.remove('copiado'); b.querySelector('em').textContent = 'Copiar'; }, 2000);
+  card.classList.remove('copiado'); void card.offsetWidth; card.classList.add('copiado');
+  if (navigator.vibrate) navigator.vibrate(18);
+  clearTimeout(card._t); card._t = setTimeout(() => card.classList.remove('copiado'), 950);
 });
 
-function pintarHora() {
-  document.getElementById('hora').textContent = cuando ? 'Actualizado a las ' + new Date(cuando).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }) : 'Buscando cupones…';
-}
-function pintarTodo() { pintarMarcas(); pintarMontos(); pintarHora(); pintar(); }
-
-// Carruseles: flechas, ruedita y arrastre con el mouse (en el celular se desliza con el dedo como siempre)
+// Filas que se deslizan: dedo en el celular; flechas, ruedita y arrastre con el mouse en la PC
 let arrastro = false;
 document.querySelectorAll('.carr').forEach((carr) => {
   const f = carr.querySelector('.fila');
-  const marcar = () => {
-    carr.classList.toggle('hayIzq', f.scrollLeft > 4);
-    carr.classList.toggle('hayDer', f.scrollLeft + f.clientWidth < f.scrollWidth - 4);
-  };
+  const marcar = () => { carr.classList.toggle('hi', f.scrollLeft > 4); carr.classList.toggle('hd', f.scrollLeft + f.clientWidth < f.scrollWidth - 4); };
   f.addEventListener('scroll', marcar, { passive: true });
   new ResizeObserver(marcar).observe(f);
   new MutationObserver(marcar).observe(f, { childList: true });
   carr.querySelector('.izq').addEventListener('click', () => f.scrollBy({ left: -f.clientWidth * 0.8, behavior: 'smooth' }));
   carr.querySelector('.der').addEventListener('click', () => f.scrollBy({ left: f.clientWidth * 0.8, behavior: 'smooth' }));
-  f.addEventListener('wheel', (e) => {
-    if (f.scrollWidth <= f.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    e.preventDefault(); f.scrollLeft += e.deltaY;
-  }, { passive: false });
+  f.addEventListener('wheel', (e) => { if (f.scrollWidth <= f.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; e.preventDefault(); f.scrollLeft += e.deltaY; }, { passive: false });
   let x0 = 0, s0 = 0, abajo = false;
   f.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' || e.button !== 0) return; abajo = true; arrastro = false; x0 = e.clientX; s0 = f.scrollLeft; });
-  window.addEventListener('pointermove', (e) => {
-    if (!abajo) return;
-    const dx = e.clientX - x0;
-    if (!arrastro && Math.abs(dx) > 6) { arrastro = true; f.classList.add('arrastrando'); }
-    if (arrastro) f.scrollLeft = s0 - dx;
-  });
-  window.addEventListener('pointerup', () => { if (!abajo) return; abajo = false; f.classList.remove('arrastrando'); setTimeout(() => { arrastro = false; }, 0); });
+  window.addEventListener('pointermove', (e) => { if (!abajo) return; const dx = e.clientX - x0; if (!arrastro && Math.abs(dx) > 6) { arrastro = true; f.classList.add('arr'); } if (arrastro) f.scrollLeft = s0 - dx; });
+  window.addEventListener('pointerup', () => { if (!abajo) return; abajo = false; f.classList.remove('arr'); setTimeout(() => { arrastro = false; }, 0); });
   marcar();
 });
-// Si se arrastró, el clic que viene después no elige nada
 document.addEventListener('click', (e) => { if (arrastro && e.target.closest('.fila')) { e.stopPropagation(); e.preventDefault(); } }, true);
 
+function pintarHora() {
+  const f = new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+  document.getElementById('fecha').textContent = f.charAt(0).toUpperCase() + f.slice(1);
+  document.getElementById('hora').textContent = cuando ? 'al día · ' + new Date(cuando).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false }) : 'buscando…';
+}
 async function traer() {
   const btn = document.getElementById('btnAct'); btn.classList.add('gira'); btn.disabled = true;
   try {
     const r = await fetch(FUENTE + '?t=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('la página contestó ' + r.status);
     cupones = leerCupones(await r.text()); cuando = Date.now();
-    guardar('cup:datos', { cupones, cuando });
-    pintarTodo();
+    guardar('cup:datos', { cupones, cuando }); pintarTodo();
   } catch (e) {
-    if (!cupones.length) document.getElementById('lista').innerHTML = `<div class="vacio"><b>No se pudieron traer los cupones</b>${esc(e.message)}. Revisá la conexión y tocá ↻.</div>`;
-    else aviso('Sin conexión: se muestran los últimos cupones');
+    if (!cupones.length) document.getElementById('lista').innerHTML = `<div class="vacio"><b>Sin conexión</b>Revisá internet y tocá el sello de arriba.</div>`;
+    else aviso('Sin conexión: se ven los últimos cupones');
   }
   btn.classList.remove('gira'); btn.disabled = false;
 }
 document.getElementById('btnAct').addEventListener('click', traer);
 
-const g = guardado('cup:datos', null); if (g && g.cupones) { cupones = g.cupones; cuando = g.cuando; }
+// Cartel propio de "hay una versión nueva de la app": lo pide la app de Android cuando hay una más nueva publicada
+window.avisoActualizacion = () => {
+  if (document.getElementById('actu')) return;
+  const d = document.createElement('div'); d.className = 'actu'; d.id = 'actu';
+  d.innerHTML = '<div><b>Hay una versión nueva</b><span id="actuTxt">Se instala en un toque.</span></div><button class="no" data-a="no">Después</button><button data-a="si">Actualizar</button>';
+  d.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.a === 'no') { d.remove(); return; }
+    b.textContent = 'Actualizando…'; b.disabled = true; if (window.AppCup && AppCup.actualizar) AppCup.actualizar();
+  });
+  document.body.appendChild(d);
+};
+window.estadoActualizacion = (t) => { const x = document.getElementById('actuTxt'); if (x) x.textContent = t; else aviso(t); };
+
+const g = leer('cup:datos', null); if (g && g.cupones) { cupones = g.cupones; cuando = g.cuando; }
 pintarTodo(); traer();
 </script>
 </body>

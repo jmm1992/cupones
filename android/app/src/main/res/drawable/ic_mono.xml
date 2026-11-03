@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Versión de un solo color (íconos temáticos de Android 13): el ticket con el "%" calado -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <group android:pivotX="54" android:pivotY="54" android:rotation="-12">
+        <path android:strokeColor="#FFFFFFFF" android:strokeWidth="4"
+            android:pathData="M32,36 L76,36 A4,4 0 0 1 80,40 L80,48 A6,6 0 0 0 80,60 L80,68 A4,4 0 0 1 76,72 L32,72 A4,4 0 0 1 28,68 L28,60 A6,6 0 0 0 28,48 L28,40 A4,4 0 0 1 32,36 Z" />
+        <path android:strokeColor="#FFFFFFFF" android:strokeWidth="4.2" android:strokeLineCap="round" android:pathData="M62,45 L46,63" />
+        <path android:fillColor="#FFFFFFFF" android:pathData="M47.5,47 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+        <path android:fillColor="#FFFFFFFF" android:pathData="M60.5,61 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+    </group>
+</vector>
