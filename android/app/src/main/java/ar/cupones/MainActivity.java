@@ -85,6 +85,7 @@ public class MainActivity extends Activity {
         pintarBarras();
         armarWeb();
         setContentView(web);
+        buscarCambios();
         // ¿Hay una versión nueva de la app? La página se actualiza sola; esto es para lo que vive en la app.
         new Thread(() -> {
             if (Actualizacion.publicada() > Actualizacion.miVersion(this)) {
@@ -124,11 +125,12 @@ public class MainActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     private void armarWeb() {
         web = new WebView(this);
-        web.setBackgroundColor(oscuro() ? Color.parseColor("#0F1218") : Color.parseColor("#F4F5F8"));
+        web.setBackgroundColor(oscuro() ? Color.parseColor("#14120E") : Color.parseColor("#EFE8DA"));
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);   // la página guarda el filtro elegido y los últimos cupones
         s.setAllowFileAccess(true);
+        s.setTextZoom(100);   // con la letra del celular agrandada, la página se salía del ancho
         web.addJavascriptInterface(new Puente(), "AppCup");
         web.setWebViewClient(new WebViewClient() {
             // La página propia se abre acá; los enlaces de los cupones, afuera (Mercado Libre abre su app)
@@ -142,14 +144,6 @@ public class MainActivity extends Activity {
             @Override public void onPageFinished(WebView v, String url) {
                 termino = true;
                 if (hayNueva) v.evaluateJavascript("window.avisoActualizacion && avisoActualizacion()", null);
-            }
-            @Override
-            public void onReceivedError(WebView v, WebResourceRequest r, WebResourceError e) {
-                if (r.isForMainFrame() && r.getUrl().toString().startsWith(WEB)) v.loadUrl(COPIA);
-            }
-            @Override
-            public void onReceivedHttpError(WebView v, WebResourceRequest r, WebResourceResponse e) {
-                if (r.isForMainFrame() && r.getUrl().toString().startsWith(WEB)) v.loadUrl(COPIA);
             }
             @Override
             public boolean onRenderProcessGone(WebView v, RenderProcessGoneDetail d) {
@@ -167,20 +161,30 @@ public class MainActivity extends Activity {
         cargar();
     }
 
-    /** Abre la página publicada en GitHub Pages (cada cambio llega solo); sin internet, la copia de adentro. */
-    static final boolean ACA_WEB = true;
+    /**
+     * AL INSTANTE: muestra la página guardada en el celular (o la de adentro de la app) sin esperar a internet.
+     * La dirección de base es la de GitHub Pages, así la página guarda lo suyo (filtros, códigos) en el mismo lugar
+     * que antes. Por detrás se fija si hay una publicada más nueva (buscarCambios).
+     */
     private void cargar() {
         termino = false;
-        if (!ACA_WEB) { web.loadUrl(COPIA); return; }
-        web.loadUrl(WEB + "?v=" + System.currentTimeMillis());
-        final WebView esta = web;
-        reloj.postDelayed(() -> { if (!termino && web == esta) web.loadUrl(COPIA); }, 15000);
+        String html = Pagina.guardada(this);
+        if (html == null) html = Pagina.deAdentro(this);
+        web.loadDataWithBaseURL(WEB, html, "text/html", "UTF-8", null);
+    }
+
+    /** Baja la página publicada; si cambió, la muestra (la app quedó abierta: al volver a ella hay que recargar). */
+    private void buscarCambios() {
+        new Thread(() -> {
+            if (Pagina.bajar(this)) runOnUiThread(() -> { if (web != null) cargar(); });
+        }, "pagina-nueva").start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (esperandoPermiso && getPackageManager().canRequestPackageInstalls()) { esperandoPermiso = false; empezarActualizacion(); }
+        if (web != null && termino) buscarCambios();   // volver a la app (que quedó abierta) también trae lo nuevo
         if (web != null && termino) {
             final boolean[] contesto = {false};
             final WebView esta = web;
@@ -209,8 +213,8 @@ public class MainActivity extends Activity {
 
     private void pintarBarras() {
         boolean o = oscuro();
-        getWindow().setStatusBarColor(o ? Color.parseColor("#191E27") : Color.WHITE);
-        getWindow().setNavigationBarColor(o ? Color.parseColor("#0F1218") : Color.parseColor("#F4F5F8"));
+        getWindow().setStatusBarColor(o ? Color.parseColor("#14120E") : Color.parseColor("#EFE8DA"));
+        getWindow().setNavigationBarColor(o ? Color.parseColor("#14120E") : Color.parseColor("#EFE8DA"));
         getWindow().getDecorView().setSystemUiVisibility(o ? 0 : View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
     }
 }

@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#14120E" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 /* Una cuponera impresa: papel, tinta, talones troquelados y sellos. */
 :root{
@@ -107,8 +107,9 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .letra b{color:var(--tinta);font-weight:700}
 .letra .tag{color:var(--rojo);font-weight:700}
 .codigo{margin-top:auto;display:flex;align-items:center;gap:10px;border:1.5px solid var(--tinta);border-radius:8px;padding:7px 8px 7px 11px;background:var(--papel)}
-.codigo span{flex:1;min-width:0;font-family:var(--f-cod);font-weight:800;font-size:16px;letter-spacing:.08em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.codigo span{flex:1;min-width:0;font-family:var(--f-cod);font-weight:800;font-size:16px;letter-spacing:.06em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .codigo em{font-style:normal;flex:0 0 auto;font-size:12px;font-weight:800;background:var(--tinta);color:var(--papel);border-radius:5px;padding:5px 9px;letter-spacing:.02em}
+.codigo span.largo{font-size:13px;letter-spacing:.02em}
 .codigo.busca{border-style:dashed;border-color:var(--tenue)}
 .codigo.busca span{font-family:var(--f-tit);font-weight:600;font-size:13px;letter-spacing:0;color:var(--tenue)}
 .codigo.busca::after{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--tenue);border-top-color:transparent;animation:gira .8s linear infinite}
@@ -263,7 +264,7 @@ function pintar() {
       <div class="cuerpo">
         <div class="cab"><span class="nom">${esc(c.tienda)}</span>${v ? `<span class="vence ${v.apuro ? 'apuro' : ''}">${v.t}</span>` : ''}</div>
         <div class="letra">${letra}</div>
-        ${cod ? `<div class="codigo"><span>${esc(cod)}</span><em>COPIAR</em></div>` : `<div class="codigo busca"><span>Buscando el código…</span></div>`}
+        ${cod ? `<div class="codigo"><span class="${cod.length > 10 ? 'largo' : ''}">${esc(cod)}</span><em>COPIAR</em></div>` : `<div class="codigo busca"><span>Buscando el código…</span></div>`}
         <div class="marcaCopia">COPIADO</div>
       </div>
     </article>`;
